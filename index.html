@@ -8,16 +8,18 @@
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0a0e17;--card:#131a2b;--card-hover:#1a2340;--border:#1e2a45;--text:#e2e8f0;--text-dim:#64748b;--green:#22c55e;--yellow:#eab308;--red:#ef4444;--blue:#3b82f6;--purple:#a855f7;--accent:#3b82f6;--panel-bg:#0f1525}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-/* Animated background */
 body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 50%,rgba(59,130,246,0.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(168,85,247,0.06) 0%,transparent 50%),radial-gradient(ellipse at 50% 80%,rgba(34,197,94,0.05) 0%,transparent 50%);pointer-events:none;z-index:0}
 
-/* Header */
 .header{position:sticky;top:0;z-index:100;background:rgba(10,14,23,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 24px}
 .header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
 .logo-area{display:flex;align-items:center;gap:14px}
 .logo-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 20px rgba(59,130,246,0.3)}
 .logo-text h1{font-size:22px;font-weight:700;background:linear-gradient(135deg,#e2e8f0,#94a3b8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .logo-text p{font-size:12px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase}
+.header-right{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.connection-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;transition:all 0.3s}
+.connection-badge.connected{border-color:rgba(34,197,94,0.3);color:var(--green)}
+.connection-badge.disconnected{border-color:rgba(239,68,68,0.3);color:var(--red)}
 .stats-bar{display:flex;gap:20px;flex-wrap:wrap}
 .stat{display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:10px}
 .stat .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
@@ -27,23 +29,22 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .stat .num{font-size:18px;font-weight:700}
 .stat .label{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px}
 
-/* Main */
 .main{max-width:1400px;margin:0 auto;padding:24px;position:relative;z-index:1}
 
-/* Engine Section */
 .engine{margin-bottom:32px}
 .engine-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .engine-badge{padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
 .engine-badge.live{background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.3)}
 .engine-badge.built{background:rgba(59,130,246,0.15);color:var(--blue);border:1px solid rgba(59,130,246,0.3)}
 .engine-badge.planned{background:rgba(234,179,8,0.15);color:var(--yellow);border:1px solid rgba(234,179,8,0.3)}
+.engine-badge.online{background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.3)}
+.engine-badge.idle{background:rgba(234,179,8,0.15);color:var(--yellow);border:1px solid rgba(234,179,8,0.3)}
+.engine-badge.offline{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.3)}
 .engine-title{font-size:16px;font-weight:600;color:var(--text)}
 .engine-subtitle{font-size:13px;color:var(--text-dim)}
 
-/* Desk Grid */
 .desk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
 
-/* Desk Card */
 .desk{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;cursor:pointer;transition:all 0.25s ease;position:relative;overflow:hidden}
 .desk:hover{background:var(--card-hover);border-color:rgba(59,130,246,0.3);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.3)}
 .desk::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0;opacity:0;transition:opacity 0.25s}
@@ -72,7 +73,6 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .pulse.online{background:var(--green)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
-/* Slide-out Panel */
 .overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.3s}
 .overlay.open{opacity:1;pointer-events:all}
 .panel{position:fixed;top:0;right:0;bottom:0;width:420px;max-width:100vw;background:var(--panel-bg);border-left:1px solid var(--border);z-index:201;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;display:flex;flex-direction:column}
@@ -96,8 +96,9 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .activity-text{font-size:13px;line-height:1.5}
 .activity-time{font-size:11px;color:var(--text-dim)}
 .desc-text{font-size:14px;color:var(--text);line-height:1.6;background:var(--card);padding:14px;border-radius:10px;border:1px solid var(--border)}
+.dry-run-badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;background:rgba(240,136,62,0.2);color:#f0883e;border:1px solid rgba(240,136,62,0.3)}
+.last-refresh{font-size:11px;color:var(--text-dim)}
 
-/* Responsive */
 @media(max-width:600px){
   .header-inner{flex-direction:column;align-items:flex-start}
   .stats-bar{width:100%;justify-content:space-between}
@@ -122,11 +123,15 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
         <p>AI Workforce Dashboard</p>
       </div>
     </div>
-    <div class="stats-bar">
-      <div class="stat"><div class="dot green"></div><div><div class="num" id="cnt-online">0</div><div class="label">Online</div></div></div>
-      <div class="stat"><div class="dot yellow"></div><div><div class="num" id="cnt-idle">0</div><div class="label">Standby</div></div></div>
-      <div class="stat"><div class="dot red"></div><div><div class="num" id="cnt-offline">0</div><div class="label">Planned</div></div></div>
-      <div class="stat"><div><div class="num" id="cnt-total">0</div><div class="label">Total Bots</div></div></div>
+    <div class="header-right">
+      <div class="connection-badge disconnected" id="conn-badge">🔴 Connecting…</div>
+      <span class="last-refresh" id="last-refresh"></span>
+      <div class="stats-bar">
+        <div class="stat"><div class="dot green"></div><div><div class="num" id="cnt-online">0</div><div class="label">Online</div></div></div>
+        <div class="stat"><div class="dot yellow"></div><div><div class="num" id="cnt-idle">0</div><div class="label">Standby</div></div></div>
+        <div class="stat"><div class="dot red"></div><div><div class="num" id="cnt-offline">0</div><div class="label">Planned</div></div></div>
+        <div class="stat"><div><div class="num" id="cnt-total">0</div><div class="label">Total Bots</div></div></div>
+      </div>
     </div>
   </div>
 </header>
@@ -144,11 +149,11 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
       <div class="desc-text" id="p-desc"></div>
     </div>
     <div class="panel-section">
-      <h3>Performance</h3>
+      <h3>Live Metrics</h3>
       <div class="metric-grid" id="p-metrics"></div>
     </div>
     <div class="panel-section">
-      <h3>Recent Activity</h3>
+      <h3>Recent Activity <span class="dry-run-badge" id="p-dryrun" style="display:none">DRY RUN</span></h3>
       <div id="p-activity"></div>
     </div>
   </div>
@@ -157,162 +162,231 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 <main class="main" id="main"></main>
 
 <script>
-const engines = [
-  {id:1,name:"Transcript Processing",status:"live",bots:[
-    {name:"LM Assistant",icon:"📞",desc:"Post-call automation for Lead Managers. Processes call transcripts, updates CRM fields, and triggers follow-up workflows automatically.",status:"online",
-      metrics:[{v:"1,247",l:"Calls Processed"},{v:"98.2%",l:"Accuracy"},{v:"3.2s",l:"Avg Response"},{v:"24/7",l:"Uptime"}],
-      activity:[{t:"Processed transcript for lead #4821 — updated disposition to 'Hot Lead'",time:"2 min ago"},{t:"Auto-tagged 3 properties as investor-friendly based on call keywords",time:"18 min ago"},{t:"Synced 12 call summaries to GHL contact records",time:"1 hr ago"}]},
-    {name:"AM Assistant",icon:"🎧",desc:"Post-call automation for Acquisition Managers. Captures deal details from calls and pushes structured data to pipeline.",status:"online",
-      metrics:[{v:"892",l:"Calls Processed"},{v:"97.8%",l:"Accuracy"},{v:"2.8s",l:"Avg Response"},{v:"24/7",l:"Uptime"}],
-      activity:[{t:"Extracted offer details from AM call — $185K ARV, $120K offer",time:"5 min ago"},{t:"Flagged follow-up needed: seller wants callback Thursday",time:"32 min ago"},{t:"Updated pipeline stage for 3 deals to 'Offer Sent'",time:"2 hr ago"}]},
-    {name:"Lead Summary Bot",icon:"📋",desc:"Auto-generates concise summaries from call transcripts. Creates structured briefs for team review.",status:"online",
-      metrics:[{v:"2,103",l:"Summaries Generated"},{v:"4.8★",l:"Quality Score"},{v:"< 10s",l:"Generation Time"},{v:"312",l:"This Week"}],
-      activity:[{t:"Generated summary for 45-min seller call — flagged as motivated",time:"8 min ago"},{t:"Batch processed 6 overnight call recordings",time:"1 hr ago"},{t:"Created daily summary digest for team Slack",time:"3 hr ago"}]}
+const API = 'https://gunner-engine-production.up.railway.app';
+
+// Static bot definitions (layout + descriptions). Real status comes from API.
+const engineLayout = [
+  {id:'transcript',name:'Transcript Processing',apiId:'transcript',bots:[
+    {name:'LM Assistant',icon:'📞',desc:'Post-call automation for Lead Managers. Processes call transcripts, updates CRM fields, and triggers follow-up workflows automatically.'},
+    {name:'AM Assistant',icon:'🎧',desc:'Post-call automation for Acquisition Managers. Captures deal details from calls and pushes structured data to pipeline.'},
+    {name:'Lead Summary Bot',icon:'📋',desc:'Auto-generates concise summaries from call transcripts. Creates structured briefs for team review.'}
   ]},
-  {id:2,name:"CRM Scanner",status:"live",bots:[
-    {name:"Pipeline Signals",icon:"📡",desc:"Detects missed and at-risk opportunities in the CRM pipeline. Alerts team to stale deals and follow-up gaps.",status:"online",
-      metrics:[{v:"47",l:"Signals Today"},{v:"12",l:"At-Risk Deals"},{v:"$2.1M",l:"Pipeline Protected"},{v:"8",l:"Saves This Week"}],
-      activity:[{t:"ALERT: Deal #3291 no contact in 14 days — $45K potential profit at risk",time:"12 min ago"},{t:"Detected 3 leads with expired follow-up dates",time:"45 min ago"},{t:"Weekly pipeline health score: 78/100 (up from 71)",time:"6 hr ago"}]},
-    {name:"Data Hygiene Bot",icon:"🧹",desc:"Continuously cleans and validates CRM data. Fixes duplicates, standardizes formats, fills missing fields.",status:"online",
-      metrics:[{v:"3,891",l:"Records Cleaned"},{v:"142",l:"Dupes Merged"},{v:"99.1%",l:"Data Quality"},{v:"0",l:"Errors Today"}],
-      activity:[{t:"Merged 3 duplicate contacts — consolidated to single record",time:"22 min ago"},{t:"Standardized 47 phone numbers to E.164 format",time:"1 hr ago"},{t:"Filled 18 missing property addresses from public records",time:"4 hr ago"}]},
-    {name:"Process Compliance Bot",icon:"⚖️",desc:"Enforces business rules and SOP compliance across the CRM. Flags violations and auto-corrects where possible.",status:"online",
-      metrics:[{v:"23",l:"Violations Today"},{v:"94%",l:"Compliance Rate"},{v:"156",l:"Auto-Corrected"},{v:"7",l:"Escalated"}],
-      activity:[{t:"Flagged: Lead assigned but no call within 5-min SLA",time:"15 min ago"},{t:"Auto-corrected 4 deals missing required disposition codes",time:"1 hr ago"},{t:"Compliance report generated — emailed to management",time:"5 hr ago"}]}
+  {id:'crm-scanner',name:'CRM Scanner',apiId:'crm-scanner',bots:[
+    {name:'Pipeline Signals',icon:'📡',desc:'Detects missed and at-risk opportunities in the CRM pipeline. Alerts team to stale deals and follow-up gaps.'},
+    {name:'Data Hygiene Bot',icon:'🧹',desc:'Continuously cleans and validates CRM data. Fixes duplicates, standardizes formats, fills missing fields.'},
+    {name:'Process Compliance Bot',icon:'⚖️',desc:'Enforces business rules and SOP compliance across the CRM. Flags violations and auto-corrects where possible.'}
   ]},
-  {id:3,name:"Nurture & Timing",status:"planned",bots:[
-    {name:"Follow Up Bot",icon:"🔄",desc:"Intelligent nurture sequences that adapt timing and messaging based on lead behavior and engagement signals.",status:"idle",
-      metrics:[{v:"—",l:"Sequences Active"},{v:"—",l:"Messages Sent"},{v:"—",l:"Response Rate"},{v:"Q2",l:"Target Launch"}],
-      activity:[{t:"Engine spec finalized — awaiting development sprint",time:"2 days ago"},{t:"Nurture template library drafted (12 sequences)",time:"5 days ago"}]},
-    {name:"After-Hours Bot",icon:"🌙",desc:"Engages inbound leads during off-hours with intelligent responses. Qualifies and schedules callbacks for the team.",status:"idle",
-      metrics:[{v:"—",l:"Leads Engaged"},{v:"—",l:"After-Hours Calls"},{v:"—",l:"Conversion Rate"},{v:"Q2",l:"Target Launch"}],
-      activity:[{t:"Call flow designed for after-hours engagement",time:"1 week ago"},{t:"Integration plan with CallRail completed",time:"2 weeks ago"}]},
-    {name:"Seller Re-engagement Bot",icon:"🔁",desc:"Re-engages declined sellers with timed follow-ups. Monitors market changes that might shift seller motivation.",status:"idle",
-      metrics:[{v:"—",l:"Sellers Tracked"},{v:"—",l:"Re-engaged"},{v:"—",l:"Win-Back Rate"},{v:"Q2",l:"Target Launch"}],
-      activity:[{t:"Re-engagement cadence templates created",time:"1 week ago"}]},
-    {name:"Appointment Bot",icon:"📅",desc:"Handles scheduling, confirmations, and no-show follow-ups. Integrates with team calendars for real-time availability.",status:"idle",
-      metrics:[{v:"—",l:"Appointments Set"},{v:"—",l:"Show Rate"},{v:"—",l:"No-Show Recovery"},{v:"Q2",l:"Target Launch"}],
-      activity:[{t:"Calendar integration spec completed",time:"3 days ago"}]}
+  {id:'nurture',name:'Nurture & Timing',apiId:'nurture',bots:[
+    {name:'Follow Up Bot',icon:'🔄',desc:'Intelligent nurture sequences that adapt timing and messaging based on lead behavior and engagement signals.'},
+    {name:'After-Hours Bot',icon:'🌙',desc:'Engages inbound leads during off-hours with intelligent responses. Qualifies and schedules callbacks for the team.'},
+    {name:'Seller Re-engagement Bot',icon:'🔁',desc:'Re-engages declined sellers with timed follow-ups. Monitors market changes that might shift seller motivation.'},
+    {name:'Appointment Bot',icon:'📅',desc:'Handles scheduling, confirmations, and no-show follow-ups. Integrates with team calendars for real-time availability.'}
   ]},
-  {id:4,name:"Data & Reporting",status:"planned",bots:[
-    {name:"KPI Entry Bot",icon:"📊",desc:"Auto-populates KPI spreadsheets from CRM, dialer, and SMS platform data. Eliminates manual data entry.",status:"idle",
-      metrics:[{v:"—",l:"Entries Made"},{v:"—",l:"Sources Connected"},{v:"—",l:"Time Saved/Week"},{v:"Q2",l:"Target Launch"}],
-      activity:[{t:"API connections tested for BatchDialer and BatchLeads",time:"3 days ago"},{t:"KPI template mapped to data sources",time:"1 week ago"}]},
-    {name:"Report Generator",icon:"📈",desc:"Generates daily, weekly, and monthly performance reports with charts and insights. Auto-distributes to stakeholders.",status:"idle",
-      metrics:[{v:"—",l:"Reports Generated"},{v:"—",l:"Templates"},{v:"—",l:"Recipients"},{v:"Q3",l:"Target Launch"}],
-      activity:[{t:"Report template designs approved",time:"1 week ago"}]},
-    {name:"Team Chat Digest",icon:"💬",desc:"Summarizes team chat channels into daily digests. Highlights decisions, action items, and key discussions.",status:"idle",
-      metrics:[{v:"—",l:"Digests Created"},{v:"—",l:"Messages Processed"},{v:"—",l:"Action Items Found"},{v:"Q3",l:"Target Launch"}],
-      activity:[{t:"Digest format and delivery schedule planned",time:"2 weeks ago"}]}
+  {id:'reporting',name:'Data & Reporting',apiId:'reporting',bots:[
+    {name:'KPI Entry Bot',icon:'📊',desc:'Auto-populates KPI spreadsheets from CRM, dialer, and SMS platform data. Eliminates manual data entry.'},
+    {name:'Report Generator',icon:'📈',desc:'Generates daily, weekly, and monthly performance reports with charts and insights. Auto-distributes to stakeholders.'},
+    {name:'Team Chat Digest',icon:'💬',desc:'Summarizes team chat channels into daily digests. Highlights decisions, action items, and key discussions.'}
   ]},
-  {id:5,name:"Scheduling",status:"planned",bots:[
-    {name:"Scheduling Coordinator",icon:"🗓️",desc:"Manages AM availability, prevents double-booking, and optimizes appointment distribution across the team.",status:"idle",
-      metrics:[{v:"—",l:"Slots Managed"},{v:"—",l:"Conflicts Resolved"},{v:"—",l:"Utilization Rate"},{v:"Q3",l:"Target Launch"}],
-      activity:[{t:"Scheduling logic requirements documented",time:"2 weeks ago"}]},
-    {name:"Callback Capture Bot",icon:"📲",desc:"AI listens to callback requests in voicemails and missed calls. Auto-schedules return calls for the team.",status:"idle",
-      metrics:[{v:"—",l:"Callbacks Captured"},{v:"—",l:"Auto-Scheduled"},{v:"—",l:"Response Time"},{v:"Q3",l:"Target Launch"}],
-      activity:[{t:"CallRail webhook integration planned",time:"2 weeks ago"}]}
+  {id:'scheduling',name:'Scheduling',apiId:'scheduling',bots:[
+    {name:'Scheduling Coordinator',icon:'🗓️',desc:'Manages AM availability, prevents double-booking, and optimizes appointment distribution across the team.'},
+    {name:'Callback Capture Bot',icon:'📲',desc:'AI listens to callback requests in voicemails and missed calls. Auto-schedules return calls for the team.'}
   ]},
-  {id:6,name:"Documents & Deals",status:"planned",bots:[
-    {name:"Contract Bot",icon:"📝",desc:"Generates, sends, and tracks contracts. Auto-populates from deal data and monitors signature status.",status:"idle",
-      metrics:[{v:"—",l:"Contracts Sent"},{v:"—",l:"Signed"},{v:"—",l:"Avg Sign Time"},{v:"Q3",l:"Target Launch"}],
-      activity:[{t:"Contract template library being compiled",time:"2 weeks ago"}]},
-    {name:"Deal Packaging Bot",icon:"📦",desc:"Auto-populates deal packages with comps, photos, repair estimates, and financials for buyer distribution.",status:"idle",
-      metrics:[{v:"—",l:"Packages Created"},{v:"—",l:"Avg Build Time"},{v:"—",l:"Data Sources"},{v:"Q3",l:"Target Launch"}],
-      activity:[{t:"Deal package template designed",time:"3 weeks ago"}]},
-    {name:"Deal Distribution Bot",icon:"🚀",desc:"Pushes completed deal packages to buyer list. Tracks interest, manages offers, and reports engagement.",status:"idle",
-      metrics:[{v:"—",l:"Deals Distributed"},{v:"—",l:"Buyer Reach"},{v:"—",l:"Avg Offers/Deal"},{v:"Q3",l:"Target Launch"}],
-      activity:[{t:"Buyer list segmentation strategy planned",time:"3 weeks ago"}]}
+  {id:'deals',name:'Documents & Deals',apiId:'deals',bots:[
+    {name:'Contract Bot',icon:'📝',desc:'Generates, sends, and tracks contracts. Auto-populates from deal data and monitors signature status.'},
+    {name:'Deal Packaging Bot',icon:'📦',desc:'Auto-populates deal packages with comps, photos, repair estimates, and financials for buyer distribution.'},
+    {name:'Deal Distribution Bot',icon:'🚀',desc:'Pushes completed deal packages to buyer list. Tracks interest, manages offers, and reports engagement.'}
   ]},
-  {id:0,name:"Standalone Bots",status:"mixed",bots:[
-    {name:"PPL Refund Bot",icon:"💰",desc:"Automatically files lead disputes on PPL platforms (Leadzolo, PropertyLeads, MotivatedSellers). Saves hours of manual work weekly.",status:"online",
-      metrics:[{v:"89",l:"Disputes Filed"},{v:"$12,400",l:"Refunds Won"},{v:"78%",l:"Win Rate"},{v:"3",l:"Platforms"}],
-      activity:[{t:"Filed dispute on PropertyLeads — wrong number, lead #8821",time:"1 hr ago"},{t:"Won $150 refund from Leadzolo — duplicate lead confirmed",time:"4 hr ago"},{t:"Weekly dispute report: 12 filed, 9 won, $1,840 recovered",time:"1 day ago"}]},
-    {name:"Market Watch Bot",icon:"🔍",desc:"Tracks market trends, comparable sales, and pricing shifts. Provides daily market intelligence for acquisition decisions.",status:"idle",
-      metrics:[{v:"—",l:"Markets Tracked"},{v:"—",l:"Comps Analyzed"},{v:"—",l:"Alerts Sent"},{v:"Q2",l:"Target Launch"}],
-      activity:[{t:"Data source evaluation complete — Zillow, Redfin, MLS APIs",time:"1 week ago"}]},
-    {name:"MLS Monitor Bot",icon:"🏠",desc:"Monitors MLS for new listings matching investment criteria. Sends instant alerts when target properties hit the market.",status:"idle",
-      metrics:[{v:"—",l:"Listings Monitored"},{v:"—",l:"Alerts Sent"},{v:"—",l:"Criteria Sets"},{v:"Q2",l:"Target Launch"}],
-      activity:[{t:"MLS API access being negotiated",time:"2 weeks ago"}]},
-    {name:"Voicemail Bot",icon:"🎤",desc:"Processes CallRail voicemail transcriptions. Categorizes, prioritizes, and routes voicemails to the right team member.",status:"idle",
-      metrics:[{v:"—",l:"Voicemails Processed"},{v:"—",l:"Auto-Routed"},{v:"—",l:"Priority Flags"},{v:"Q2",l:"Target Launch"}],
-      activity:[{t:"CallRail API integration tested successfully",time:"5 days ago"}]}
+  {id:'standalone',name:'Standalone Bots',apiId:null,bots:[
+    {name:'PPL Refund Bot',icon:'💰',desc:'Automatically files lead disputes on PPL platforms (Leadzolo, PropertyLeads, MotivatedSellers). Saves hours of manual work weekly.'},
+    {name:'Market Watch Bot',icon:'🔍',desc:'Tracks market trends, comparable sales, and pricing shifts. Provides daily market intelligence for acquisition decisions.'},
+    {name:'MLS Monitor Bot',icon:'🏠',desc:'Monitors MLS for new listings matching investment criteria. Sends instant alerts when target properties hit the market.'},
+    {name:'Voicemail Bot',icon:'🎤',desc:'Processes CallRail voicemail transcriptions. Categorizes, prioritizes, and routes voicemails to the right team member.'}
   ]}
 ];
 
-// Render
-const main=document.getElementById('main');
-let totalOnline=0,totalIdle=0,totalOffline=0;
+let engineData = {};   // keyed by apiId
+let allLogs = [];
+let connected = false;
+let dryRunMode = false;
 
-engines.forEach(eng=>{
-  const section=document.createElement('div');
-  section.className='engine';
-  const statusClass=eng.status==='live'?'live':eng.status==='mixed'?'built':'planned';
-  const statusLabel=eng.status==='live'?'LIVE':eng.status==='mixed'?'MIXED':'PLANNED';
-  section.innerHTML=`<div class="engine-header">
-    <span class="engine-badge ${statusClass}">${statusLabel}</span>
-    <span class="engine-title">${eng.id?'Engine '+eng.id+' —':''} ${eng.name}</span>
-    <span class="engine-subtitle">${eng.bots.length} bot${eng.bots.length>1?'s':''}</span>
-  </div><div class="desk-grid" id="grid-${eng.id}"></div>`;
-  main.appendChild(section);
-  const grid=document.getElementById('grid-'+eng.id);
+function timeAgo(ts) {
+  if (!ts) return '—';
+  const diff = (Date.now() - new Date(ts).getTime()) / 1000;
+  if (diff < 60) return Math.round(diff) + 's ago';
+  if (diff < 3600) return Math.round(diff / 60) + 'm ago';
+  if (diff < 86400) return Math.round(diff / 3600) + 'h ago';
+  return Math.round(diff / 86400) + 'd ago';
+}
 
-  eng.bots.forEach((bot,i)=>{
-    if(bot.status==='online')totalOnline++;
-    else if(bot.status==='idle')totalIdle++;
-    else totalOffline++;
+async function fetchData() {
+  try {
+    const [statusRes, enginesRes, logsRes] = await Promise.all([
+      fetch(API + '/api/status'),
+      fetch(API + '/api/engines'),
+      fetch(API + '/api/logs/recent?limit=50')
+    ]);
+    if (!statusRes.ok || !enginesRes.ok) throw new Error('API error');
 
-    const card=document.createElement('div');
-    card.className=`desk status-${bot.status}`;
-    const lastAction=bot.activity&&bot.activity[0]?bot.activity[0].time:'—';
-    card.innerHTML=`<div class="desk-top">
-      <div class="bot-avatar ${bot.status}">${bot.icon}<div class="status-dot ${bot.status}"></div></div>
-      <div class="desk-actions">${lastAction}</div>
-    </div>
-    <div class="bot-name">${bot.name}</div>
-    <div class="bot-desc">${bot.desc.substring(0,60)}…</div>
-    <div class="bot-meta">
-      <span class="bot-status-text ${bot.status}">${bot.status==='online'?'<span class="pulse online"></span>Online':bot.status==='idle'?'Standby':'Offline'}</span>
-    </div>`;
-    card.onclick=()=>openPanel(bot,eng);
-    grid.appendChild(card);
+    const status = await statusRes.json();
+    const engData = await enginesRes.json();
+    allLogs = await logsRes.json();
+    dryRunMode = status.dryRun;
+
+    // Index engine data by id
+    engineData = {};
+    (engData.engines || []).forEach(e => { engineData[e.id] = e; });
+
+    connected = true;
+    updateConnectionBadge();
+    render();
+  } catch (err) {
+    console.error('Failed to fetch engine data:', err);
+    connected = false;
+    updateConnectionBadge();
+    render();
+  }
+}
+
+function updateConnectionBadge() {
+  const badge = document.getElementById('conn-badge');
+  if (connected) {
+    badge.className = 'connection-badge connected';
+    badge.textContent = '🟢 Connected to Engine';
+  } else {
+    badge.className = 'connection-badge disconnected';
+    badge.textContent = '🔴 Disconnected';
+  }
+  document.getElementById('last-refresh').textContent = 'Updated ' + new Date().toLocaleTimeString();
+}
+
+function getEngineStatus(apiId) {
+  if (!connected || !apiId) return 'offline';
+  const e = engineData[apiId];
+  return e ? e.status : 'offline';
+}
+
+function getBotStatus(engineApiId) {
+  // All bots in an engine share the engine's status
+  return getEngineStatus(engineApiId);
+}
+
+function getEngineLogs(apiId) {
+  if (!apiId || !engineData[apiId]) return [];
+  return (engineData[apiId].recentLogs || []);
+}
+
+function render() {
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  let totalOnline = 0, totalIdle = 0, totalOffline = 0;
+
+  engineLayout.forEach(eng => {
+    const section = document.createElement('div');
+    section.className = 'engine';
+    const engStatus = getEngineStatus(eng.apiId);
+    const statusLabel = connected && engStatus === 'online' ? 'LIVE' : connected && engStatus === 'idle' ? 'STANDBY' : 'OFFLINE';
+    const badgeClass = engStatus === 'online' ? 'online' : engStatus === 'idle' ? 'idle' : 'offline';
+    const engInfo = engineData[eng.apiId];
+    const lastScan = engInfo ? timeAgo(engInfo.lastRunTime) : '—';
+    const eventCount = engInfo ? engInfo.eventCount : 0;
+
+    section.innerHTML = `<div class="engine-header">
+      <span class="engine-badge ${badgeClass}">${statusLabel}</span>
+      <span class="engine-title">${eng.name}</span>
+      <span class="engine-subtitle">${eng.bots.length} bot${eng.bots.length > 1 ? 's' : ''} · ${eventCount} events · Last scan: ${lastScan}</span>
+    </div><div class="desk-grid" id="grid-${eng.id}"></div>`;
+    main.appendChild(section);
+    const grid = document.getElementById('grid-' + eng.id);
+
+    eng.bots.forEach(bot => {
+      const botStatus = getBotStatus(eng.apiId);
+      if (botStatus === 'online') totalOnline++;
+      else if (botStatus === 'idle') totalIdle++;
+      else totalOffline++;
+
+      const card = document.createElement('div');
+      card.className = `desk status-${botStatus}`;
+      const engLogs = getEngineLogs(eng.apiId);
+      const lastAction = engLogs[0] ? timeAgo(engLogs[0].timestamp) : '—';
+      const lastActionText = engLogs[0] ? engLogs[0].description : '';
+      const statusText = botStatus === 'online' ? '<span class="pulse online"></span>Online' : botStatus === 'idle' ? 'Standby' : 'Offline';
+
+      card.innerHTML = `<div class="desk-top">
+        <div class="bot-avatar ${botStatus}">${bot.icon}<div class="status-dot ${botStatus}"></div></div>
+        <div class="desk-actions">${lastAction}</div>
+      </div>
+      <div class="bot-name">${bot.name}</div>
+      <div class="bot-desc">${lastActionText ? lastActionText.substring(0, 70) + (lastActionText.length > 70 ? '…' : '') : bot.desc.substring(0, 60) + '…'}</div>
+      <div class="bot-meta">
+        <span class="bot-status-text ${botStatus}">${statusText}</span>
+      </div>`;
+      card.onclick = () => openPanel(bot, eng);
+      grid.appendChild(card);
+    });
   });
-});
 
-document.getElementById('cnt-online').textContent=totalOnline;
-document.getElementById('cnt-idle').textContent=totalIdle;
-document.getElementById('cnt-offline').textContent=totalOffline;
-document.getElementById('cnt-total').textContent=totalOnline+totalIdle+totalOffline;
+  document.getElementById('cnt-online').textContent = totalOnline;
+  document.getElementById('cnt-idle').textContent = totalIdle;
+  document.getElementById('cnt-offline').textContent = totalOffline;
+  document.getElementById('cnt-total').textContent = totalOnline + totalIdle + totalOffline;
+}
 
-function openPanel(bot,eng){
-  document.getElementById('p-avatar').className='panel-avatar bot-avatar '+bot.status;
-  document.getElementById('p-avatar').innerHTML=bot.icon;
-  document.getElementById('p-name').textContent=bot.name;
-  document.getElementById('p-engine').textContent=(eng.id?'Engine '+eng.id+' — ':'')+eng.name;
-  document.getElementById('p-desc').textContent=bot.desc;
+function openPanel(bot, eng) {
+  const botStatus = getBotStatus(eng.apiId);
+  document.getElementById('p-avatar').className = 'panel-avatar bot-avatar ' + botStatus;
+  document.getElementById('p-avatar').innerHTML = bot.icon;
+  document.getElementById('p-name').textContent = bot.name;
+  document.getElementById('p-engine').textContent = eng.name;
+  document.getElementById('p-desc').textContent = bot.desc;
 
-  const mg=document.getElementById('p-metrics');
-  mg.innerHTML='';
-  (bot.metrics||[]).forEach(m=>{
-    mg.innerHTML+=`<div class="metric"><div class="val">${m.v}</div><div class="mlabel">${m.l}</div></div>`;
-  });
+  // Dry run badge
+  const dryBadge = document.getElementById('p-dryrun');
+  dryBadge.style.display = dryRunMode ? 'inline-block' : 'none';
 
-  const ag=document.getElementById('p-activity');
-  ag.innerHTML='';
-  (bot.activity||[]).forEach(a=>{
-    ag.innerHTML+=`<div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">${a.t}</div><div class="activity-time">${a.time}</div></div></div>`;
-  });
+  // Metrics from real data
+  const engInfo = engineData[eng.apiId];
+  const mg = document.getElementById('p-metrics');
+  mg.innerHTML = '';
+  if (engInfo) {
+    const metrics = [
+      { v: engInfo.eventCount, l: 'Events Logged' },
+      { v: engInfo.status === 'online' ? '🟢' : engInfo.status === 'idle' ? '🟡' : '🔴', l: 'Status' },
+      { v: engInfo.lastRunTime ? timeAgo(engInfo.lastRunTime) : '—', l: 'Last Run' },
+      { v: dryRunMode ? 'DRY RUN' : 'LIVE', l: 'Mode' }
+    ];
+    metrics.forEach(m => {
+      mg.innerHTML += `<div class="metric"><div class="val">${m.v}</div><div class="mlabel">${m.l}</div></div>`;
+    });
+  } else {
+    mg.innerHTML = '<div class="metric"><div class="val">—</div><div class="mlabel">No data</div></div>';
+  }
+
+  // Activity from real logs
+  const ag = document.getElementById('p-activity');
+  ag.innerHTML = '';
+  const logs = getEngineLogs(eng.apiId);
+  if (logs.length === 0) {
+    ag.innerHTML = '<div style="color:var(--text-dim);font-size:13px;padding:12px 0;">No recent activity from this engine.</div>';
+  } else {
+    logs.forEach(l => {
+      ag.innerHTML += `<div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">${l.description || l.operation}</div><div class="activity-time">${timeAgo(l.timestamp)}</div></div></div>`;
+    });
+  }
 
   document.getElementById('overlay').classList.add('open');
   document.getElementById('panel').classList.add('open');
 }
 
-function closePanel(){
+function closePanel() {
   document.getElementById('overlay').classList.remove('open');
   document.getElementById('panel').classList.remove('open');
 }
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel()});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+// Initial load + auto-refresh every 30s
+fetchData();
+setInterval(fetchData, 30000);
 </script>
 </body>
 </html>
