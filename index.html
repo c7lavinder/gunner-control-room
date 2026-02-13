@@ -288,12 +288,13 @@ function render() {
     const badgeClass = engStatus === 'online' ? 'online' : engStatus === 'idle' ? 'idle' : 'offline';
     const engInfo = engineData[eng.apiId];
     const lastScan = engInfo ? timeAgo(engInfo.lastRunTime) : '—';
-    const eventCount = engInfo ? engInfo.eventCount : 0;
+    const actionCount = engInfo ? (engInfo.actionCount || 0) : 0;
+    const statusDesc = engInfo ? (engInfo.statusDescription || '') : '';
 
     section.innerHTML = `<div class="engine-header">
       <span class="engine-badge ${badgeClass}">${statusLabel}</span>
       <span class="engine-title">${eng.name}</span>
-      <span class="engine-subtitle">${eng.bots.length} bot${eng.bots.length > 1 ? 's' : ''} · ${eventCount} events · Last scan: ${lastScan}</span>
+      <span class="engine-subtitle">${eng.bots.length} bot${eng.bots.length > 1 ? 's' : ''} · ${actionCount} action${actionCount !== 1 ? 's' : ''} today · ${statusDesc}</span>
     </div><div class="desk-grid" id="grid-${eng.id}"></div>`;
     main.appendChild(section);
     const grid = document.getElementById('grid-' + eng.id);
@@ -306,17 +307,31 @@ function render() {
 
       const card = document.createElement('div');
       card.className = `desk status-${botStatus}`;
+      const engInfo = engineData[eng.apiId];
       const engLogs = getEngineLogs(eng.apiId);
-      const lastAction = engLogs[0] ? timeAgo(engLogs[0].timestamp) : '—';
-      const lastActionText = engLogs[0] ? engLogs[0].description : '';
+      const lastActionTime = engInfo && engInfo.lastActionTime ? timeAgo(engInfo.lastActionTime) : (engLogs[0] ? timeAgo(engLogs[0].timestamp) : '—');
+      const lastActionText = engInfo && engInfo.lastAction ? engInfo.lastAction : '';
+      const actionCount = engInfo ? (engInfo.actionCount || 0) : 0;
       const statusText = botStatus === 'online' ? '<span class="pulse online"></span>Online' : botStatus === 'idle' ? 'Standby' : 'Offline';
+
+      // Show last action, or monitoring message, or description
+      let cardDesc;
+      if (lastActionText) {
+        cardDesc = lastActionText.substring(0, 70) + (lastActionText.length > 70 ? '…' : '');
+      } else if (botStatus === 'online' || botStatus === 'idle') {
+        cardDesc = 'Monitoring — no actions needed yet';
+      } else {
+        cardDesc = bot.desc.substring(0, 60) + '…';
+      }
+
+      const actionBadge = actionCount > 0 ? `${actionCount} action${actionCount !== 1 ? 's' : ''}` : lastActionTime;
 
       card.innerHTML = `<div class="desk-top">
         <div class="bot-avatar ${botStatus}">${bot.icon}<div class="status-dot ${botStatus}"></div></div>
-        <div class="desk-actions">${lastAction}</div>
+        <div class="desk-actions">${actionBadge}</div>
       </div>
       <div class="bot-name">${bot.name}</div>
-      <div class="bot-desc">${lastActionText ? lastActionText.substring(0, 70) + (lastActionText.length > 70 ? '…' : '') : bot.desc.substring(0, 60) + '…'}</div>
+      <div class="bot-desc">${cardDesc}</div>
       <div class="bot-meta">
         <span class="bot-status-text ${botStatus}">${statusText}</span>
       </div>`;
@@ -349,9 +364,9 @@ function openPanel(bot, eng) {
   mg.innerHTML = '';
   if (engInfo) {
     const metrics = [
-      { v: engInfo.eventCount, l: 'Events Logged' },
+      { v: engInfo.actionCount || 0, l: 'Actions Today' },
       { v: engInfo.status === 'online' ? '🟢' : engInfo.status === 'idle' ? '🟡' : '🔴', l: 'Status' },
-      { v: engInfo.lastRunTime ? timeAgo(engInfo.lastRunTime) : '—', l: 'Last Run' },
+      { v: engInfo.lastActionTime ? timeAgo(engInfo.lastActionTime) : '—', l: 'Last Action' },
       { v: dryRunMode ? 'DRY RUN' : 'LIVE', l: 'Mode' }
     ];
     metrics.forEach(m => {
