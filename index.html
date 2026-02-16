@@ -52,7 +52,9 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .desk.status-online::before{background:linear-gradient(90deg,var(--green),var(--blue))}
 .desk.status-idle::before{background:linear-gradient(90deg,var(--yellow),#f97316)}
 .desk.status-standby::before{background:linear-gradient(90deg,var(--yellow),#f97316)}
+.desk.status-dry-run::before{background:linear-gradient(90deg,#f97316,#f59e0b)}
 .desk.status-offline::before{background:linear-gradient(90deg,var(--red),#dc2626)}
+.engine-badge.dryrun{background:linear-gradient(90deg,#f97316,#f59e0b);color:#000}
 .desk-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
 .bot-avatar{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;position:relative}
 .bot-avatar.online{background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25)}
@@ -275,42 +277,43 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 const API = 'https://gunner-engine-production.up.railway.app';
 
 // Static bot definitions (layout + descriptions). Real status comes from API.
+// engineKey maps to ENGINE_<KEY>=active env vars on Railway
 const engineLayout = [
-  {id:'data-hygiene',name:'Data Hygiene',apiId:'data-hygiene',bots:[
+  {id:'data-hygiene',name:'Data Hygiene',apiId:'data-hygiene',engineKey:'data_hygiene',bots:[
     {name:'Data Cleaner',icon:'🧹',desc:'Validates phone numbers, emails, normalizes names (ALL CAPS → Title Case), standardizes addresses. Flags invalid data for review.'},
     {name:'Data Enrichment',icon:'🔍',desc:'Detects missing fields, standardizes PPL source tags (leadzolo/propertyleads/motivatedsellers), fixes attribution source for Lead IQ scoring.'},
     {name:'Duplicate Detector',icon:'🔀',desc:'Finds contacts sharing the same phone or address. Flags for manual review — never auto-merges.'},
     {name:'Quality Scorer',icon:'📊',desc:'Scores every contact 0-100 on data completeness. Tags as good/needs-review/poor. Flags untouched leads with zero activity.'}
   ]},
-  {id:'lead-iq',name:'Lead Intelligence',apiId:'lead-iq',bots:[
+  {id:'lead-iq',name:'Lead Intelligence',apiId:'lead-iq',engineKey:'lead_iq',bots:[
     {name:'Lead IQ Scorer',icon:'🧠',desc:'Scores and qualifies every new lead in real-time. Analyzes source, motivation, timeline, condition, and price factors to assign HOT/WARM ratings.'},
     {name:'Lead Watchdog',icon:'🐕',desc:'Monitors new lead SLA — flags untouched leads at 15 min, escalates at 30 min. Ensures no PPL lead ($125-150) gets missed.'},
     {name:'New Lead Responder',icon:'⚡',desc:'Instant after-hours response. Fires SMS immediately when leads come in outside business hours, queues call task for next business day 9 AM.'}
   ]},
-  {id:'crm-scanner',name:'CRM Scanner',apiId:'crm-scanner',bots:[
+  {id:'crm-scanner',name:'CRM Scanner',apiId:'crm-scanner',engineKey:'crm_scanner',bots:[
     {name:'Pipeline Signals',icon:'📡',desc:'14 detection rules across 3 tiers (Missed/At Risk/Worth a Look). Scans pipeline health hourly, catches deals falling through cracks.'},
     {name:'Unread Alert Monitor',icon:'📬',desc:'Flags team members with 3+ unread conversations. Prevents leads from going cold while sitting in inbox.'},
     {name:'Ghosted Lead Detector',icon:'👻',desc:'Identifies leads with 4+ outbound attempts and 0 inbound replies over 10+ days. Separates truly ghosted from just slow.'},
     {name:'Walkthrough SLA',icon:'🏃',desc:'Monitors time between appointment set and walkthrough completion. Flags delays that could lose motivated sellers.'}
   ]},
-  {id:'nurture',name:'Nurture & Timing',apiId:'nurture',bots:[
+  {id:'nurture',name:'Nurture & Timing',apiId:'nurture',engineKey:'nurture',bots:[
     {name:'Follow Up Bot',icon:'🔄',desc:'Full lifecycle replacement for GHL follow-up workflows. Auto-discovers dispositions from activity, manages 1-month/4-month/1-year nurture cycles.'},
     {name:'Workflow Shadow',icon:'🔮',desc:'Shadows all 3 GHL workflows (1 Month, 4 Month, 1 Year) in parallel with A/B SMS template rotation. Ready to replace when DRY_RUN flips.'},
     {name:'After-Hours Bot',icon:'🌙',desc:'Engages inbound leads during off-hours with intelligent responses. Qualifies and schedules callbacks for the team.'},
     {name:'Seller Re-engagement',icon:'🔁',desc:'Re-engages declined sellers with timed follow-ups. Monitors for signals that seller motivation may have changed.'},
     {name:'Appointment Bot',icon:'📅',desc:'Catches no-shows, sends confirmations, manages reschedules. Integrates with team calendars for real-time availability.'}
   ]},
-  {id:'scheduling',name:'Scheduling',apiId:'scheduling',bots:[
+  {id:'scheduling',name:'Scheduling',apiId:'scheduling',engineKey:'scheduling',bots:[
     {name:'Scheduling Coordinator',icon:'🗓️',desc:'Manages AM availability, prevents double-booking, detects calendar mismatches between GHL and team schedules.'},
     {name:'Callback Capture Bot',icon:'📲',desc:'Monitors voicemails and missed calls for callback requests. Auto-creates call tasks assigned to the right team member.'},
     {name:'Cancellation Handler',icon:'🚫',desc:'Detects appointment cancellations and immediately re-engages the lead with reschedule options before they go cold.'}
   ]},
-  {id:'deals',name:'Documents & Deals',apiId:'deals',bots:[
+  {id:'deals',name:'Documents & Deals',apiId:'deals',engineKey:'deals',bots:[
     {name:'Contract Bot',icon:'📝',desc:'Monitors Under Contract stage — detected 17+ active contracts. Tracks signature status, deadlines, and closing timeline.'},
     {name:'Deal Packaging Bot',icon:'📦',desc:'Scores deal completeness (photos, ARV, repairs, comps). Auto-generates PDF + email template when ready. Signals "ready to market" for buyer distribution.'},
     {name:'Deal Distribution Bot',icon:'🚀',desc:'Tier-based buyer matching (verified funding, purchase history, buybox fit). Tier 1 gets 2-hour head start before wider blast.'}
   ]},
-  {id:'dispo-lead-gen',name:'Dispo Lead Gen',apiId:'buyer-lead-gen',bots:[
+  {id:'dispo-lead-gen',name:'Dispo Lead Gen',apiId:'buyer-lead-gen',engineKey:'buyer_leadgen',bots:[
     {name:'Deal Packager',icon:'📦',desc:'Scores completeness, auto-generates PDF + email template when deal is ready. Signals "ready to market" for distribution.'},
     {name:'Schedule Engine',icon:'📅',desc:'Weekly cadence: Mon/Tue exclusive buyer push, Wed public blast, Thu/Fri inbound + hunts. Express lane for urgent deals.'},
     {name:'Platform Distributor',icon:'🚀',desc:'Pushes deals to InvestorLift, Mevlo, Facebook when schedule permits. Tracks views and responses per platform.'},
@@ -319,18 +322,18 @@ const engineLayout = [
     {name:'48-Hour Clock',icon:'⏰',desc:'Tracks marketing start, escalates at 12h/24h/36h/48h if no buyer interest.'},
     {name:'Response Tracker',icon:'📊',desc:'Scores buyer quality, source attribution, auto-manages buyer pipeline stages.'}
   ]},
-  {id:'reporting',name:'Data & Reporting',apiId:'reporting',bots:[
+  {id:'reporting',name:'Data & Reporting',apiId:'reporting',engineKey:'reporting',bots:[
     {name:'KPI Entry Bot',icon:'📊',desc:'Calculates real KPIs from GHL data — leads, appointments, offers, contracts. Ready to push to spreadsheet when Google Sheets access is granted.'},
     {name:'Report Generator',icon:'📈',desc:'Daily reports at 6pm, weekly Monday 8am, monthly 1st of month. Performance insights, pipeline health, team metrics.'},
     {name:'Team Digest',icon:'💬',desc:'Hourly team activity digest — who\'s active, call volumes, conversation counts. Surfaces team performance patterns.'}
   ]},
-  {id:'voicemail',name:'Voicemail Processing',apiId:'voicemail',bots:[
+  {id:'voicemail',name:'Voicemail Processing',apiId:'voicemail',engineKey:'voicemail',bots:[
     {name:'Voicemail Bot',icon:'🎤',desc:'CallRail integration — polls every 30 min, matches voicemails to GHL contacts, classifies urgency, routes to right team member.'}
   ]},
-  {id:'signals',name:'Pipeline Intelligence',apiId:'signals-v2',bots:[
+  {id:'signals',name:'Pipeline Intelligence',apiId:'signals-v2',engineKey:'signals',bots:[
     {name:'Signals V2 Deep Scan',icon:'🔬',desc:'Every 4 hours — comprehensive pipeline analysis. Detects competitor mentions, stall tactics, pricing disconnects, and hidden opportunities across all conversations.'}
   ]},
-  {id:'standalone',name:'Planned / External',apiId:null,bots:[
+  {id:'standalone',name:'Planned / External',apiId:null,engineKey:null,bots:[
     {name:'PPL Refund Bot',icon:'💰',desc:'Files lead disputes on PropertyLeads and MotivatedSellers. Needs Playwright automation (no API). Two disputes filed so far ($300 potential refunds).'},
     {name:'Market Watch Bot',icon:'🔍',desc:'Tracks market trends, comparable sales, and pricing shifts. Daily market intelligence for acquisition decisions.'},
     {name:'MLS Monitor Bot',icon:'🏠',desc:'Monitors MLS for pipeline properties that get listed. Alerts team when a deal property shows up on market.'}
@@ -341,6 +344,7 @@ let engineData = {};   // keyed by apiId
 let allLogs = [];
 let connected = false;
 let dryRunMode = false;
+let engineStatuses = {};
 
 function timeAgo(ts) {
   if (!ts) return '—';
@@ -364,6 +368,7 @@ async function fetchData() {
     const engData = await enginesRes.json();
     allLogs = await logsRes.json();
     dryRunMode = status.dryRun;
+    engineStatuses = status.engineStatuses || {};
 
     // Index engine data by id
     engineData = {};
@@ -392,15 +397,21 @@ function updateConnectionBadge() {
   document.getElementById('last-refresh').textContent = 'Updated ' + new Date().toLocaleTimeString();
 }
 
-function getEngineStatus(apiId) {
+function getEngineStatus(apiId, engineKey) {
   if (!connected || !apiId) return 'offline';
+  // Per-engine activation check — if engine is in dry-run, show as dry-run regardless of log activity
+  if (engineKey && engineStatuses[engineKey] === 'dry-run') return 'dry-run';
+  if (engineKey && engineStatuses[engineKey] === 'active') {
+    const e = engineData[apiId];
+    if (e && e.status === 'online') return 'online';
+    return 'standby'; // active but no recent activity
+  }
   const e = engineData[apiId];
   return e ? e.status : 'offline';
 }
 
-function getBotStatus(engineApiId) {
-  // All bots in an engine share the engine's status
-  return getEngineStatus(engineApiId);
+function getBotStatus(engineApiId, engineKey) {
+  return getEngineStatus(engineApiId, engineKey);
 }
 
 function getEngineLogs(apiId) {
@@ -427,9 +438,9 @@ function render() {
   engineLayout.forEach(eng => {
     const section = document.createElement('div');
     section.className = 'engine';
-    const engStatus = getEngineStatus(eng.apiId);
-    const statusLabel = connected && engStatus === 'online' ? 'LIVE' : connected && (engStatus === 'idle' || engStatus === 'standby') ? 'STANDBY' : 'OFFLINE';
-    const badgeClass = engStatus === 'online' ? 'online' : (engStatus === 'idle' || engStatus === 'standby') ? 'idle' : 'offline';
+    const engStatus = getEngineStatus(eng.apiId, eng.engineKey);
+    const statusLabel = engStatus === 'dry-run' ? 'DRY RUN' : connected && engStatus === 'online' ? 'LIVE' : connected && (engStatus === 'idle' || engStatus === 'standby') ? 'STANDBY' : 'OFFLINE';
+    const badgeClass = engStatus === 'dry-run' ? 'dryrun' : engStatus === 'online' ? 'online' : (engStatus === 'idle' || engStatus === 'standby') ? 'idle' : 'offline';
     const engInfo = engineData[eng.apiId];
     const lastScan = engInfo ? timeAgo(engInfo.lastRunTime) : '—';
     const actionCount = engInfo ? (engInfo.actionCount || 0) : 0;
@@ -444,10 +455,10 @@ function render() {
     const grid = document.getElementById('grid-' + eng.id);
 
     eng.bots.forEach(bot => {
-      const botStatus = getBotStatus(eng.apiId);
+      const botStatus = getBotStatus(eng.apiId, eng.engineKey);
       if (botStatus === 'online') totalOnline++;
       else if (botStatus === 'idle' || botStatus === 'standby') totalIdle++;
-      else totalOffline++;
+      else totalOffline++; // dry-run and offline both count as offline
 
       const card = document.createElement('div');
       card.className = `desk status-${botStatus}`;
@@ -456,12 +467,14 @@ function render() {
       const lastActionTime = engInfo && engInfo.lastActionTime ? timeAgo(engInfo.lastActionTime) : (engLogs[0] ? timeAgo(engLogs[0].timestamp) : '—');
       const lastActionText = engInfo && engInfo.lastAction ? engInfo.lastAction : '';
       const actionCount = engInfo ? (engInfo.actionCount || 0) : 0;
-      const statusText = botStatus === 'online' ? '<span class="pulse online"></span>Online' : (botStatus === 'idle' || botStatus === 'standby') ? 'Standby' : 'Offline';
+      const statusText = botStatus === 'dry-run' ? '<span style="color:var(--yellow)">● DRY RUN</span>' : botStatus === 'online' ? '<span class="pulse online"></span>Online' : (botStatus === 'idle' || botStatus === 'standby') ? 'Standby' : 'Offline';
 
       // Show last action, or monitoring message, or description
       let cardDesc;
       if (lastActionText) {
         cardDesc = lastActionText.substring(0, 70) + (lastActionText.length > 70 ? '…' : '');
+      } else if (botStatus === 'dry-run') {
+        cardDesc = 'Logging only — not taking actions';
       } else if (botStatus === 'online' || botStatus === 'idle' || botStatus === 'standby') {
         cardDesc = 'Active — waiting for triggers';
       } else {
@@ -491,7 +504,7 @@ function render() {
 }
 
 function openPanel(bot, eng) {
-  const botStatus = getBotStatus(eng.apiId);
+  const botStatus = getBotStatus(eng.apiId, eng.engineKey);
   document.getElementById('p-avatar').className = 'panel-avatar bot-avatar ' + botStatus;
   document.getElementById('p-avatar').innerHTML = bot.icon;
   document.getElementById('p-name').textContent = bot.name;
@@ -522,9 +535,9 @@ function openPanel(bot, eng) {
   if (engInfo) {
     const metrics = [
       { v: engInfo.actionCount || 0, l: 'Actions Today' },
-      { v: engInfo.status === 'online' ? '🟢' : (engInfo.status === 'idle' || engInfo.status === 'standby') ? '🟡' : '🔴', l: 'Status' },
+      { v: botStatus === 'online' ? '🟢' : (botStatus === 'idle' || botStatus === 'standby') ? '🟡' : botStatus === 'dry-run' ? '🟠' : '🔴', l: 'Status' },
       { v: engInfo.lastActionTime ? timeAgo(engInfo.lastActionTime) : '—', l: 'Last Action' },
-      { v: engineIsActive ? 'ACTIVE' : dryRunMode ? 'DRY RUN' : 'LIVE', l: 'Mode' }
+      { v: botStatus === 'dry-run' ? 'DRY RUN' : engineIsActive ? 'ACTIVE' : 'OFFLINE', l: 'Mode' }
     ];
     metrics.forEach(m => {
       mg.innerHTML += `<div class="metric"><div class="val">${m.v}</div><div class="mlabel">${m.l}</div></div>`;
