@@ -51,6 +51,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .desk:hover::before{opacity:1}
 .desk.status-online::before{background:linear-gradient(90deg,var(--green),var(--blue))}
 .desk.status-idle::before{background:linear-gradient(90deg,var(--yellow),#f97316)}
+.desk.status-standby::before{background:linear-gradient(90deg,var(--yellow),#f97316)}
 .desk.status-offline::before{background:linear-gradient(90deg,var(--red),#dc2626)}
 .desk-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
 .bot-avatar{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;position:relative}
@@ -427,8 +428,8 @@ function render() {
     const section = document.createElement('div');
     section.className = 'engine';
     const engStatus = getEngineStatus(eng.apiId);
-    const statusLabel = connected && engStatus === 'online' ? 'LIVE' : connected && engStatus === 'idle' ? 'STANDBY' : 'OFFLINE';
-    const badgeClass = engStatus === 'online' ? 'online' : engStatus === 'idle' ? 'idle' : 'offline';
+    const statusLabel = connected && engStatus === 'online' ? 'LIVE' : connected && (engStatus === 'idle' || engStatus === 'standby') ? 'STANDBY' : 'OFFLINE';
+    const badgeClass = engStatus === 'online' ? 'online' : (engStatus === 'idle' || engStatus === 'standby') ? 'idle' : 'offline';
     const engInfo = engineData[eng.apiId];
     const lastScan = engInfo ? timeAgo(engInfo.lastRunTime) : '—';
     const actionCount = engInfo ? (engInfo.actionCount || 0) : 0;
@@ -445,7 +446,7 @@ function render() {
     eng.bots.forEach(bot => {
       const botStatus = getBotStatus(eng.apiId);
       if (botStatus === 'online') totalOnline++;
-      else if (botStatus === 'idle') totalIdle++;
+      else if (botStatus === 'idle' || botStatus === 'standby') totalIdle++;
       else totalOffline++;
 
       const card = document.createElement('div');
@@ -455,14 +456,14 @@ function render() {
       const lastActionTime = engInfo && engInfo.lastActionTime ? timeAgo(engInfo.lastActionTime) : (engLogs[0] ? timeAgo(engLogs[0].timestamp) : '—');
       const lastActionText = engInfo && engInfo.lastAction ? engInfo.lastAction : '';
       const actionCount = engInfo ? (engInfo.actionCount || 0) : 0;
-      const statusText = botStatus === 'online' ? '<span class="pulse online"></span>Online' : botStatus === 'idle' ? 'Standby' : 'Offline';
+      const statusText = botStatus === 'online' ? '<span class="pulse online"></span>Online' : (botStatus === 'idle' || botStatus === 'standby') ? 'Standby' : 'Offline';
 
       // Show last action, or monitoring message, or description
       let cardDesc;
       if (lastActionText) {
         cardDesc = lastActionText.substring(0, 70) + (lastActionText.length > 70 ? '…' : '');
-      } else if (botStatus === 'online' || botStatus === 'idle') {
-        cardDesc = 'Monitoring — no actions needed yet';
+      } else if (botStatus === 'online' || botStatus === 'idle' || botStatus === 'standby') {
+        cardDesc = 'Active — waiting for triggers';
       } else {
         cardDesc = bot.desc.substring(0, 60) + '…';
       }
@@ -497,9 +498,22 @@ function openPanel(bot, eng) {
   document.getElementById('p-engine').textContent = eng.name;
   document.getElementById('p-desc').textContent = bot.desc;
 
-  // Dry run badge
+  // Dry run badge — per-engine awareness
   const dryBadge = document.getElementById('p-dryrun');
-  dryBadge.style.display = dryRunMode ? 'inline-block' : 'none';
+  const engineIsActive = botStatus === 'online' || botStatus === 'idle' || botStatus === 'standby';
+  if (engineIsActive) {
+    dryBadge.style.display = 'inline-block';
+    dryBadge.textContent = 'ACTIVE';
+    dryBadge.style.background = 'var(--green)';
+    dryBadge.style.color = '#000';
+  } else if (dryRunMode) {
+    dryBadge.style.display = 'inline-block';
+    dryBadge.textContent = 'DRY RUN';
+    dryBadge.style.background = '';
+    dryBadge.style.color = '';
+  } else {
+    dryBadge.style.display = 'none';
+  }
 
   // Metrics from real data
   const engInfo = engineData[eng.apiId];
@@ -508,9 +522,9 @@ function openPanel(bot, eng) {
   if (engInfo) {
     const metrics = [
       { v: engInfo.actionCount || 0, l: 'Actions Today' },
-      { v: engInfo.status === 'online' ? '🟢' : engInfo.status === 'idle' ? '🟡' : '🔴', l: 'Status' },
+      { v: engInfo.status === 'online' ? '🟢' : (engInfo.status === 'idle' || engInfo.status === 'standby') ? '🟡' : '🔴', l: 'Status' },
       { v: engInfo.lastActionTime ? timeAgo(engInfo.lastActionTime) : '—', l: 'Last Action' },
-      { v: dryRunMode ? 'DRY RUN' : 'LIVE', l: 'Mode' }
+      { v: engineIsActive ? 'ACTIVE' : dryRunMode ? 'DRY RUN' : 'LIVE', l: 'Mode' }
     ];
     metrics.forEach(m => {
       mg.innerHTML += `<div class="metric"><div class="val">${m.v}</div><div class="mlabel">${m.l}</div></div>`;
