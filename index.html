@@ -275,6 +275,12 @@ const API = 'https://gunner-engine-production.up.railway.app';
 
 // Static bot definitions (layout + descriptions). Real status comes from API.
 const engineLayout = [
+  {id:'data-hygiene',name:'Data Hygiene',apiId:'data-hygiene',bots:[
+    {name:'Data Cleaner',icon:'🧹',desc:'Validates phone numbers, emails, normalizes names (ALL CAPS → Title Case), standardizes addresses. Flags invalid data for review.'},
+    {name:'Data Enrichment',icon:'🔍',desc:'Detects missing fields, standardizes PPL source tags (leadzolo/propertyleads/motivatedsellers), fixes attribution source for Lead IQ scoring.'},
+    {name:'Duplicate Detector',icon:'🔀',desc:'Finds contacts sharing the same phone or address. Flags for manual review — never auto-merges.'},
+    {name:'Quality Scorer',icon:'📊',desc:'Scores every contact 0-100 on data completeness. Tags as good/needs-review/poor. Flags untouched leads with zero activity.'}
+  ]},
   {id:'lead-iq',name:'Lead Intelligence',apiId:'lead-iq',bots:[
     {name:'Lead IQ Scorer',icon:'🧠',desc:'Scores and qualifies every new lead in real-time. Analyzes source, motivation, timeline, condition, and price factors to assign HOT/WARM ratings.'},
     {name:'Lead Watchdog',icon:'🐕',desc:'Monitors new lead SLA — flags untouched leads at 15 min, escalates at 30 min. Ensures no PPL lead ($125-150) gets missed.'},
