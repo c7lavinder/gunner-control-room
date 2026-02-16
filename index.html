@@ -166,41 +166,56 @@ const API = 'https://gunner-engine-production.up.railway.app';
 
 // Static bot definitions (layout + descriptions). Real status comes from API.
 const engineLayout = [
-  {id:'transcript',name:'Transcript Processing',apiId:'transcript',bots:[
-    {name:'LM Assistant',icon:'📞',desc:'Post-call automation for Lead Managers. Processes call transcripts, updates CRM fields, and triggers follow-up workflows automatically.'},
-    {name:'AM Assistant',icon:'🎧',desc:'Post-call automation for Acquisition Managers. Captures deal details from calls and pushes structured data to pipeline.'},
-    {name:'Lead Summary Bot',icon:'📋',desc:'Auto-generates concise summaries from call transcripts. Creates structured briefs for team review.'}
+  {id:'lead-iq',name:'Lead Intelligence',apiId:'lead-iq',bots:[
+    {name:'Lead IQ Scorer',icon:'🧠',desc:'Scores and qualifies every new lead in real-time. Analyzes source, motivation, timeline, condition, and price factors to assign HOT/WARM ratings.'},
+    {name:'Lead Watchdog',icon:'🐕',desc:'Monitors new lead SLA — flags untouched leads at 15 min, escalates at 30 min. Ensures no PPL lead ($125-150) gets missed.'},
+    {name:'New Lead Responder',icon:'⚡',desc:'Instant after-hours response. Fires SMS immediately when leads come in outside business hours, queues call task for next business day 9 AM.'}
   ]},
   {id:'crm-scanner',name:'CRM Scanner',apiId:'crm-scanner',bots:[
-    {name:'Pipeline Signals',icon:'📡',desc:'Detects missed and at-risk opportunities in the CRM pipeline. Alerts team to stale deals and follow-up gaps.'},
-    {name:'Data Hygiene Bot',icon:'🧹',desc:'Continuously cleans and validates CRM data. Fixes duplicates, standardizes formats, fills missing fields.'},
-    {name:'Process Compliance Bot',icon:'⚖️',desc:'Enforces business rules and SOP compliance across the CRM. Flags violations and auto-corrects where possible.'}
+    {name:'Pipeline Signals',icon:'📡',desc:'14 detection rules across 3 tiers (Missed/At Risk/Worth a Look). Scans pipeline health hourly, catches deals falling through cracks.'},
+    {name:'Unread Alert Monitor',icon:'📬',desc:'Flags team members with 3+ unread conversations. Prevents leads from going cold while sitting in inbox.'},
+    {name:'Ghosted Lead Detector',icon:'👻',desc:'Identifies leads with 4+ outbound attempts and 0 inbound replies over 10+ days. Separates truly ghosted from just slow.'},
+    {name:'Walkthrough SLA',icon:'🏃',desc:'Monitors time between appointment set and walkthrough completion. Flags delays that could lose motivated sellers.'}
   ]},
   {id:'nurture',name:'Nurture & Timing',apiId:'nurture',bots:[
-    {name:'Follow Up Bot',icon:'🔄',desc:'Intelligent nurture sequences that adapt timing and messaging based on lead behavior and engagement signals.'},
+    {name:'Follow Up Bot',icon:'🔄',desc:'Full lifecycle replacement for GHL follow-up workflows. Auto-discovers dispositions from activity, manages 1-month/4-month/1-year nurture cycles.'},
+    {name:'Workflow Shadow',icon:'🔮',desc:'Shadows all 3 GHL workflows (1 Month, 4 Month, 1 Year) in parallel with A/B SMS template rotation. Ready to replace when DRY_RUN flips.'},
     {name:'After-Hours Bot',icon:'🌙',desc:'Engages inbound leads during off-hours with intelligent responses. Qualifies and schedules callbacks for the team.'},
-    {name:'Seller Re-engagement Bot',icon:'🔁',desc:'Re-engages declined sellers with timed follow-ups. Monitors market changes that might shift seller motivation.'},
-    {name:'Appointment Bot',icon:'📅',desc:'Handles scheduling, confirmations, and no-show follow-ups. Integrates with team calendars for real-time availability.'}
-  ]},
-  {id:'reporting',name:'Data & Reporting',apiId:'reporting',bots:[
-    {name:'KPI Entry Bot',icon:'📊',desc:'Auto-populates KPI spreadsheets from CRM, dialer, and SMS platform data. Eliminates manual data entry.'},
-    {name:'Report Generator',icon:'📈',desc:'Generates daily, weekly, and monthly performance reports with charts and insights. Auto-distributes to stakeholders.'},
-    {name:'Team Chat Digest',icon:'💬',desc:'Summarizes team chat channels into daily digests. Highlights decisions, action items, and key discussions.'}
+    {name:'Seller Re-engagement',icon:'🔁',desc:'Re-engages declined sellers with timed follow-ups. Monitors for signals that seller motivation may have changed.'},
+    {name:'Appointment Bot',icon:'📅',desc:'Catches no-shows, sends confirmations, manages reschedules. Integrates with team calendars for real-time availability.'}
   ]},
   {id:'scheduling',name:'Scheduling',apiId:'scheduling',bots:[
-    {name:'Scheduling Coordinator',icon:'🗓️',desc:'Manages AM availability, prevents double-booking, and optimizes appointment distribution across the team.'},
-    {name:'Callback Capture Bot',icon:'📲',desc:'AI listens to callback requests in voicemails and missed calls. Auto-schedules return calls for the team.'}
+    {name:'Scheduling Coordinator',icon:'🗓️',desc:'Manages AM availability, prevents double-booking, detects calendar mismatches between GHL and team schedules.'},
+    {name:'Callback Capture Bot',icon:'📲',desc:'Monitors voicemails and missed calls for callback requests. Auto-creates call tasks assigned to the right team member.'},
+    {name:'Cancellation Handler',icon:'🚫',desc:'Detects appointment cancellations and immediately re-engages the lead with reschedule options before they go cold.'}
   ]},
   {id:'deals',name:'Documents & Deals',apiId:'deals',bots:[
-    {name:'Contract Bot',icon:'📝',desc:'Generates, sends, and tracks contracts. Auto-populates from deal data and monitors signature status.'},
-    {name:'Deal Packaging Bot',icon:'📦',desc:'Auto-populates deal packages with comps, photos, repair estimates, and financials for buyer distribution.'},
-    {name:'Deal Distribution Bot',icon:'🚀',desc:'Pushes completed deal packages to buyer list. Tracks interest, manages offers, and reports engagement.'}
+    {name:'Contract Bot',icon:'📝',desc:'Monitors Under Contract stage — detected 17+ active contracts. Tracks signature status, deadlines, and closing timeline.'},
+    {name:'Deal Packaging Bot',icon:'📦',desc:'Scores deal completeness (photos, ARV, repairs, comps). Auto-generates PDF + email template when ready. Signals "ready to market" for buyer distribution.'},
+    {name:'Deal Distribution Bot',icon:'🚀',desc:'Tier-based buyer matching (verified funding, purchase history, buybox fit). Tier 1 gets 2-hour head start before wider blast.'}
   ]},
-  {id:'standalone',name:'Standalone Bots',apiId:null,bots:[
-    {name:'PPL Refund Bot',icon:'💰',desc:'Automatically files lead disputes on PPL platforms (Leadzolo, PropertyLeads, MotivatedSellers). Saves hours of manual work weekly.'},
-    {name:'Market Watch Bot',icon:'🔍',desc:'Tracks market trends, comparable sales, and pricing shifts. Provides daily market intelligence for acquisition decisions.'},
-    {name:'MLS Monitor Bot',icon:'🏠',desc:'Monitors MLS for new listings matching investment criteria. Sends instant alerts when target properties hit the market.'},
-    {name:'Voicemail Bot',icon:'🎤',desc:'Processes CallRail voicemail transcriptions. Categorizes, prioritizes, and routes voicemails to the right team member.'}
+  {id:'buyer-lead-gen',name:'Buyer Lead Gen',apiId:'buyer-lead-gen',bots:[
+    {name:'Schedule Engine',icon:'📅',desc:'Weekly dispo cadence — Mon/Tue exclusive buyer list push, Wed public blast everywhere, Thu/Fri inbound + buyer hunts. Express lane for urgent deals.'},
+    {name:'FAQ Auto-Responder',icon:'💬',desc:'Auto-answers repetitive buyer questions (ARV, repairs, access, price, beds/baths) from GHL deal data. Esteban only handles real negotiation.'},
+    {name:'Buyer Hunt Support',icon:'🎯',desc:'Generates outreach lists with pre-written scripts for listing agents. Tracks contacts across deals, prevents duplicate outreach.'},
+    {name:'48-Hour Clock',icon:'⏰',desc:'Tracks marketing start for every deal. Escalating alerts at 12h/24h/36h/48h — Dispo Mgnr → Dispo Admin → Owner if no buyer interest.'},
+    {name:'Response Tracker',icon:'📊',desc:'Scores buyer quality (funding, speed, repeat buyer). Source attribution across InvestorLift, Mevlo, Facebook, email. Auto-manages buyer pipeline stages.'}
+  ]},
+  {id:'reporting',name:'Data & Reporting',apiId:'reporting',bots:[
+    {name:'KPI Entry Bot',icon:'📊',desc:'Calculates real KPIs from GHL data — leads, appointments, offers, contracts. Ready to push to spreadsheet when Google Sheets access is granted.'},
+    {name:'Report Generator',icon:'📈',desc:'Daily reports at 6pm, weekly Monday 8am, monthly 1st of month. Performance insights, pipeline health, team metrics.'},
+    {name:'Team Digest',icon:'💬',desc:'Hourly team activity digest — who\'s active, call volumes, conversation counts. Surfaces team performance patterns.'}
+  ]},
+  {id:'voicemail',name:'Voicemail Processing',apiId:'voicemail',bots:[
+    {name:'Voicemail Bot',icon:'🎤',desc:'CallRail integration — polls every 30 min, matches voicemails to GHL contacts, classifies urgency, routes to right team member.'}
+  ]},
+  {id:'signals',name:'Pipeline Intelligence',apiId:'signals-v2',bots:[
+    {name:'Signals V2 Deep Scan',icon:'🔬',desc:'Every 4 hours — comprehensive pipeline analysis. Detects competitor mentions, stall tactics, pricing disconnects, and hidden opportunities across all conversations.'}
+  ]},
+  {id:'standalone',name:'Planned / External',apiId:null,bots:[
+    {name:'PPL Refund Bot',icon:'💰',desc:'Files lead disputes on PropertyLeads and MotivatedSellers. Needs Playwright automation (no API). Two disputes filed so far ($300 potential refunds).'},
+    {name:'Market Watch Bot',icon:'🔍',desc:'Tracks market trends, comparable sales, and pricing shifts. Daily market intelligence for acquisition decisions.'},
+    {name:'MLS Monitor Bot',icon:'🏠',desc:'Monitors MLS for pipeline properties that get listed. Alerts team when a deal property shows up on market.'}
   ]}
 ];
 
