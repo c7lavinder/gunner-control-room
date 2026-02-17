@@ -199,6 +199,98 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 </div>
 
 <main class="main">
+  <!-- New Seller Lead Flow -->
+  <section class="pipeline-section" id="seller-lead-flow">
+    <div class="pipeline-header">
+      <h2>📞 New Seller Lead Flow</h2>
+      <span class="pipeline-badge">LIVE</span>
+    </div>
+    <div class="pipeline-flow">
+      <div class="pipeline-stage">
+        <div class="stage-pill" style="background:rgba(168,85,247,0.15);border-color:rgba(168,85,247,0.4);color:var(--purple)">📥 Lead Enters CRM</div>
+        <div class="stage-count">PPL · Dialer · SMS · Forms</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <div class="stage-pill">🧹 Data Hygiene</div>
+        <div class="stage-count">Clean · Enrich · Verify</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <div class="stage-pill">🧠 Lead IQ</div>
+        <div class="stage-count">Score · Tag · Assign · Route</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-split">
+        <div class="split-branch">
+          <div class="branch-label hunts">🔥 HOT</div>
+          <div class="branch-channels">
+            <span class="channel-tag">Move to Hot Leads</span>
+            <span class="channel-tag">Urgent task</span>
+            <span class="channel-tag">Email alert</span>
+          </div>
+        </div>
+        <div class="split-branch">
+          <div class="branch-label lists">🌡️ WARM</div>
+          <div class="branch-channels">
+            <span class="channel-tag">Move to Warm Leads</span>
+            <span class="channel-tag">Standard task</span>
+            <span class="channel-tag">Email alert</span>
+          </div>
+        </div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <div class="stage-pill start-marketing">⚡ New Lead Responder</div>
+        <div class="stage-count">Immediate SMS</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <div class="stage-pill">📱 Team Member Calls</div>
+        <div class="stage-count">Task + notification</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-split">
+        <div class="split-branch">
+          <div class="branch-label" style="background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.3)">✅ Connected</div>
+          <div class="branch-channels">
+            <span class="channel-tag">Qualification</span>
+            <span class="channel-tag">→ Appointment</span>
+          </div>
+        </div>
+        <div class="split-branch">
+          <div class="branch-label" style="background:rgba(234,179,8,0.15);color:var(--yellow);border:1px solid rgba(234,179,8,0.3)">📵 No Answer</div>
+          <div class="branch-channels">
+            <span class="channel-tag">Working Drip activates</span>
+            <span class="channel-tag">104-day SMS + email</span>
+          </div>
+        </div>
+        <div class="split-branch">
+          <div class="branch-label" style="background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.3)">🚫 DNC</div>
+          <div class="branch-channels">
+            <span class="channel-tag">Flag + stop all</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="schedule-bar">
+      <div class="schedule-title">Engine Chain (Sequential)</div>
+      <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap;padding:8px 0">
+        <span style="padding:8px 14px;border-radius:8px;background:rgba(34,197,94,0.2);color:var(--green);font-size:12px;font-weight:600">1. Data Hygiene</span>
+        <span style="color:var(--text-dim)">→</span>
+        <span style="padding:8px 14px;border-radius:8px;background:rgba(59,130,246,0.2);color:var(--blue);font-size:12px;font-weight:600">2. Lead IQ + Stage Move</span>
+        <span style="color:var(--text-dim)">→</span>
+        <span style="padding:8px 14px;border-radius:8px;background:rgba(168,85,247,0.2);color:var(--purple);font-size:12px;font-weight:600">3. New Lead Responder SMS</span>
+        <span style="color:var(--text-dim)">→</span>
+        <span style="padding:8px 14px;border-radius:8px;background:rgba(234,179,8,0.2);color:var(--yellow);font-size:12px;font-weight:600">4. Working Drip (if no response)</span>
+      </div>
+      <div class="schedule-legend">
+        <div class="legend-item"><div class="legend-dot green"></div>Triggers on: Sales Process → New Lead stage (sellers only)</div>
+        <div class="legend-item"><div class="legend-dot blue"></div>Buyers, partners, other contacts: untouched</div>
+      </div>
+    </div>
+  </section>
+
   <!-- Dispo Pipeline Section -->
   <section class="pipeline-section" id="dispo-pipeline">
     <div class="pipeline-header">
