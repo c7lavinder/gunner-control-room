@@ -168,7 +168,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
       <div class="stats-bar">
         <div class="stat"><div class="dot green"></div><div><div class="num" id="cnt-online">0</div><div class="label">Online</div></div></div>
         <div class="stat"><div class="dot yellow"></div><div><div class="num" id="cnt-idle">0</div><div class="label">Standby</div></div></div>
-        <div class="stat"><div class="dot red"></div><div><div class="num" id="cnt-offline">0</div><div class="label">Planned</div></div></div>
+        <div class="stat"><div class="dot red"></div><div><div class="num" id="cnt-offline">0</div><div class="label">Dry Run</div></div></div>
         <div class="stat"><div><div class="num" id="cnt-total">0</div><div class="label">Total Bots</div></div></div>
       </div>
     </div>
@@ -294,63 +294,74 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
   <!-- Follow-Up Bot Flow -->
   <section class="pipeline-section" id="followup-flow">
     <div class="pipeline-header">
-      <h2>🔄 Follow-Up Bot</h2>
-      <span class="pipeline-badge" style="background:rgba(234,179,8,0.15);color:var(--yellow);border:1px solid rgba(234,179,8,0.3)">BUILDING</span>
-      <span style="font-size:12px;color:var(--text-dim);margin-left:auto">$199/mo bundle — 3 engines</span>
+      <h2>🔄 Follow-Up Bot V2</h2>
+      <span class="pipeline-badge" style="background:rgba(240,136,62,0.15);color:#f0883e;border:1px solid rgba(240,136,62,0.3)">BUILT — DRY RUN</span>
+      <span style="font-size:12px;color:var(--text-dim);margin-left:auto">$199/mo bundle — 4 agents · 35 msgs/day cap</span>
     </div>
     <div class="pipeline-flow">
       <div class="pipeline-stage">
-        <div class="stage-pill" style="background:rgba(168,85,247,0.15);border-color:rgba(168,85,247,0.4);color:var(--purple)">📥 Lead Enters Follow-Up</div>
-        <div class="stage-count">1 Month · 4 Month · 1 Year</div>
+        <div class="stage-pill" style="background:rgba(168,85,247,0.15);border-color:rgba(168,85,247,0.4);color:var(--purple)">📥 Team Moves to Follow-Up</div>
+        <div class="stage-count">From Sales Process</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <div class="stage-pill">🚪 Entry Router</div>
+        <div class="stage-count">Tag · Remove Drip · Create Opp</div>
       </div>
       <div class="pipeline-arrow">→</div>
       <div class="pipeline-stage">
         <div class="stage-pill">📋 Organizer</div>
-        <div class="stage-count">Right bucket · Clean data · Tasks</div>
+        <div class="stage-count">Score motivation · Delta analysis</div>
       </div>
       <div class="pipeline-arrow">→</div>
       <div class="pipeline-stage">
         <div class="stage-pill">💬 Messenger</div>
-        <div class="stage-count">Adaptive messaging · Reads signals</div>
+        <div class="stage-count">4 Month + 12 Month only</div>
       </div>
       <div class="pipeline-arrow">→</div>
       <div class="pipeline-split">
         <div class="split-branch">
-          <div class="branch-label" style="background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.3)">🔥 Re-engaged</div>
+          <div class="branch-label" style="background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.3)">🔥 Re-engaged (7+)</div>
           <div class="branch-channels">
-            <span class="channel-tag">→ Appointment Booker</span>
-            <span class="channel-tag">→ Walkthrough with AM</span>
+            <span class="channel-tag">→ Closer (stub)</span>
+            <span class="channel-tag">→ Back to Sales Process</span>
           </div>
         </div>
         <div class="split-branch">
-          <div class="branch-label" style="background:rgba(59,130,246,0.15);color:var(--blue);border:1px solid rgba(59,130,246,0.3)">🌡️ Warming Up</div>
+          <div class="branch-label" style="background:rgba(59,130,246,0.15);color:var(--blue);border:1px solid rgba(59,130,246,0.3)">🌡️ Warming Up (4-6)</div>
           <div class="branch-channels">
-            <span class="channel-tag">Increase intensity</span>
+            <span class="channel-tag">0.6x timing multiplier</span>
             <span class="channel-tag">More frequent touches</span>
           </div>
         </div>
         <div class="split-branch">
-          <div class="branch-label" style="background:rgba(234,179,8,0.15);color:var(--yellow);border:1px solid rgba(234,179,8,0.3)">❄️ Still Cold</div>
+          <div class="branch-label" style="background:rgba(234,179,8,0.15);color:var(--yellow);border:1px solid rgba(234,179,8,0.3)">❄️ Still Cold (0-3)</div>
           <div class="branch-channels">
+            <span class="channel-tag">Standard intervals</span>
             <span class="channel-tag">Light touches</span>
-            <span class="channel-tag">Longer intervals</span>
           </div>
         </div>
         <div class="split-branch">
-          <div class="branch-label" style="background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.3)">🚫 Dead</div>
+          <div class="branch-label" style="background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.3)">🚫 Dead (strict)</div>
           <div class="branch-channels">
-            <span class="channel-tag">Stop messaging</span>
-            <span class="channel-tag">Archive</span>
+            <span class="channel-tag">Legal threats only</span>
+            <span class="channel-tag">Confirmed sold</span>
+            <span class="channel-tag">Unviable property</span>
           </div>
         </div>
       </div>
     </div>
     <div class="schedule-bar">
-      <div class="schedule-title">Three Goals</div>
-      <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap;padding:8px 0">
-        <span style="padding:8px 14px;border-radius:8px;background:rgba(34,197,94,0.2);color:var(--green);font-size:12px;font-weight:600">1. Re-ignite interest</span>
-        <span style="padding:8px 14px;border-radius:8px;background:rgba(59,130,246,0.2);color:var(--blue);font-size:12px;font-weight:600">2. Sort by motivation</span>
-        <span style="padding:8px 14px;border-radius:8px;background:rgba(168,85,247,0.2);color:var(--purple);font-size:12px;font-weight:600">3. Book appointments</span>
+      <div class="schedule-title">Pipeline Split</div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:8px 0">
+        <span style="padding:8px 14px;border-radius:8px;background:rgba(59,130,246,0.2);color:var(--blue);font-size:12px;font-weight:600">1 Month → MANUAL (team in Sales Process)</span>
+        <span style="padding:8px 14px;border-radius:8px;background:rgba(168,85,247,0.2);color:var(--purple);font-size:12px;font-weight:600">4 Month → BOT (Follow Up pipeline)</span>
+        <span style="padding:8px 14px;border-radius:8px;background:rgba(168,85,247,0.2);color:var(--purple);font-size:12px;font-weight:600">12 Month → BOT (Follow Up pipeline)</span>
+      </div>
+      <div class="schedule-legend">
+        <div class="legend-item"><div class="legend-dot blue"></div>1 Month stays in Sales Process — team handles directly</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>4 Month + 12 Month in Follow Up pipeline — bots manage</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f0883e"></div>Disposition Advisor silently auditing call → bucket accuracy</div>
       </div>
     </div>
   </section>
@@ -435,73 +446,94 @@ const API = 'https://gunner-engine-production.up.railway.app';
 // Static bot definitions (layout + descriptions). Real status comes from API.
 // engineKey maps to ENGINE_<KEY>=active env vars on Railway
 const engineLayout = [
+  // ─── ACTIVE ENGINES (9 live) ───
   {id:'data-hygiene',name:'Data Hygiene',apiId:'data-hygiene',engineKey:'data_hygiene',bots:[
-    {name:'Data Cleaner',icon:'🧹',desc:'Validates phone numbers, emails, normalizes names (ALL CAPS → Title Case), standardizes addresses. Flags invalid data for review.'},
-    {name:'Data Enrichment',icon:'🔍',desc:'Detects missing fields, standardizes PPL source tags (leadzolo/propertyleads/motivatedsellers), fixes attribution source for Lead IQ scoring.'},
-    {name:'Duplicate Detector',icon:'🔀',desc:'Finds contacts sharing the same phone or address. Flags for manual review — never auto-merges.'},
-    {name:'Quality Scorer',icon:'📊',desc:'Scores every contact 0-100 on data completeness. Tags as good/needs-review/poor. Flags untouched leads with zero activity.'}
+    {name:'Data Cleaner',icon:'🧹',desc:'Validates phone numbers, emails, normalizes names (ALL CAPS → Title Case), standardizes addresses. Event-driven — triggers on New Lead stage only.'},
+    {name:'Property Lookup',icon:'🏠',desc:'Enriches contacts with property data via RentCast — owner verification, last sale date, property details. Flags owner mismatches for PPL disputes.'},
   ]},
   {id:'lead-iq',name:'Lead Intelligence',apiId:'lead-iq',engineKey:'lead_iq',bots:[
-    {name:'Lead IQ Scorer',icon:'🧠',desc:'Scores and qualifies every new lead in real-time. Analyzes source, motivation, timeline, condition, and price factors to assign HOT/WARM ratings.'},
-    {name:'Lead Watchdog',icon:'🐕',desc:'Monitors new lead SLA — flags untouched leads at 15 min, escalates at 30 min. Ensures no PPL lead ($125-150) gets missed.'},
-    {name:'New Lead Responder',icon:'⚡',desc:'Fires immediate SMS to every new seller lead 24/7. Time-aware — adjusts the ask based on time of day (morning: "when today?", afternoon: "free in 15 min?", evening/night: "tomorrow morning?").'}
+    {name:'Lead IQ Scorer',icon:'🧠',desc:'Scores every new lead on 5 factors (timeline, condition, price, motivation, source). Assigns HOT/WARM, routes to team, moves pipeline stage.'},
+    {name:'Lead Watchdog',icon:'🐕',desc:'Monitors new lead SLA — flags untouched leads at 15 min, escalates to Jessica at 30 min. Ensures no PPL lead ($125-150) gets missed.'},
+    {name:'New Lead Responder',icon:'⚡',desc:'Fires immediate SMS to every scored lead via Message Queue. Time-aware — morning: "giving you a call shortly", evening: "tomorrow morning?". Source-branched for PPL vs dialer vs forms.'},
+    {name:'Disposition Advisor',icon:'🎯',desc:'SILENT — analyzes every completed call in Sales Process and recommends a follow-up bucket (Stay / 1 Month / 4 Month / 12 Month). Backend logging only — building audit data before going live.'},
   ]},
-  {id:'crm-scanner',name:'CRM Scanner',apiId:'crm-scanner',engineKey:'crm_scanner',bots:[
-    {name:'Pipeline Signals',icon:'📡',desc:'14 detection rules across 3 tiers (Missed/At Risk/Worth a Look). Scans pipeline health hourly, catches deals falling through cracks.'},
-    {name:'Unread Alert Monitor',icon:'📬',desc:'Flags team members with 3+ unread conversations. Prevents leads from going cold while sitting in inbox.'},
-    {name:'Ghosted Lead Detector',icon:'👻',desc:'Identifies leads with 4+ outbound attempts and 0 inbound replies over 10+ days. Separates truly ghosted from just slow.'},
-    {name:'Walkthrough SLA',icon:'🏃',desc:'Monitors time between appointment set and walkthrough completion. Flags delays that could lose motivated sellers.'}
+  {id:'working-drip',name:'Working Leads Drip',apiId:'working-drip',engineKey:'working_drip',bots:[
+    {name:'104-Day Drip Engine',icon:'📲',desc:'Automated SMS + email contact sequence for leads that didn\'t answer. 26 touchpoints over 104 days, routes through Message Queue. Stops on real reply or DNC.'},
+    {name:'Reply Classifier',icon:'🔍',desc:'3-bucket classifier: real reply → stop drip, brush-off → continue, DNC → stop + flag. Runs on every inbound message for enrolled contacts.'},
   ]},
-  {id:'followup',name:'Follow-Up Bot — $199/mo',apiId:'followup',engineKey:'followup',bots:[
-    {name:'Follow-Up Organizer',icon:'📋',desc:'Keeps every lead in the right follow-up bucket. Reads engagement signals to move leads between intensity tiers. Accurate notes via Call Summary, accurate tasks via Task Manager. The brain that puts the messenger in position to succeed.'},
-    {name:'Follow-Up Messenger',icon:'💬',desc:'Intelligent nurture messaging that adapts to each seller. Hot leads get frequent, direct touches. Cold leads get lighter, longer-spaced touches. Varies approach — market updates, social proof, direct asks. Way beyond a dumb drip.'},
-    {name:'Appointment Booker',icon:'📅',desc:'The closer. When engagement signals are warm enough, takes over from Messenger and pushes toward booking a walkthrough with the AM. Handles scheduling, confirmations, and no-show follow-up.'}
+  {id:'call-summary',name:'Call Summary',apiId:'call-summary',engineKey:'call_summary',bots:[
+    {name:'Call Summary Bot',icon:'📞',desc:'Processes completed calls with real engagement (60s+, both parties spoke). Generates rich summaries with property details, motivation, timeline, pricing, next steps. Context API lets other engines inject intel.'},
   ]},
-  {id:'scheduling',name:'Scheduling',apiId:'scheduling',engineKey:'scheduling',bots:[
-    {name:'Scheduling Coordinator',icon:'🗓️',desc:'Manages AM availability, prevents double-booking, detects calendar mismatches between GHL and team schedules.'},
-    {name:'Callback Capture Bot',icon:'📲',desc:'Monitors voicemails and missed calls for callback requests. Auto-creates call tasks assigned to the right team member.'},
-    {name:'Cancellation Handler',icon:'🚫',desc:'Detects appointment cancellations and immediately re-engages the lead with reschedule options before they go cold.'}
-  ]},
-  {id:'deals',name:'Documents & Deals',apiId:'deals',engineKey:'deals',bots:[
-    {name:'Contract Bot',icon:'📝',desc:'Monitors Under Contract stage — detected 17+ active contracts. Tracks signature status, deadlines, and closing timeline.'},
-    {name:'Deal Packaging Bot',icon:'📦',desc:'Scores deal completeness (photos, ARV, repairs, comps). Auto-generates PDF + email template when ready. Signals "ready to market" for buyer distribution.'},
-    {name:'Deal Distribution Bot',icon:'🚀',desc:'Tier-based buyer matching (verified funding, purchase history, buybox fit). Tier 1 gets 2-hour head start before wider blast.'}
-  ]},
-  {id:'dispo-lead-gen',name:'Dispo Lead Gen',apiId:'buyer-lead-gen',engineKey:'buyer_leadgen',bots:[
-    {name:'Deal Packager',icon:'📦',desc:'Scores completeness, auto-generates PDF + email template when deal is ready. Signals "ready to market" for distribution.'},
-    {name:'Schedule Engine',icon:'📅',desc:'Weekly cadence: Mon/Tue exclusive buyer push, Wed public blast, Thu/Fri inbound + hunts. Express lane for urgent deals.'},
-    {name:'Platform Distributor',icon:'🚀',desc:'Pushes deals to InvestorLift, Mevlo, Facebook when schedule permits. Tracks views and responses per platform.'},
-    {name:'FAQ Auto-Responder',icon:'💬',desc:'Auto-answers buyer questions (ARV, repairs, access, price) from deal data. Escalates negotiation to Dispo Mgnr.'},
-    {name:'Buyer Hunt Support',icon:'🎯',desc:'Generates outreach lists for listing agents near deal. Pre-writes scripts, tracks contacts across deals.'},
-    {name:'48-Hour Clock',icon:'⏰',desc:'Tracks marketing start, escalates at 12h/24h/36h/48h if no buyer interest.'},
-    {name:'Response Tracker',icon:'📊',desc:'Scores buyer quality, source attribution, auto-manages buyer pipeline stages.'}
-  ]},
-  {id:'reporting',name:'Data & Reporting',apiId:'reporting',engineKey:'reporting',bots:[
-    {name:'KPI Entry Bot',icon:'📊',desc:'Calculates real KPIs from GHL data — leads, appointments, offers, contracts. Ready to push to spreadsheet when Google Sheets access is granted.'},
-    {name:'Report Generator',icon:'📈',desc:'Daily reports at 6pm, weekly Monday 8am, monthly 1st of month. Performance insights, pipeline health, team metrics.'},
-    {name:'Team Digest',icon:'💬',desc:'Hourly team activity digest — who\'s active, call volumes, conversation counts. Surfaces team performance patterns.'}
-  ]},
-  {id:'voicemail',name:'Voicemail Processing',apiId:'voicemail',engineKey:'voicemail',bots:[
-    {name:'Voicemail Bot',icon:'🎤',desc:'CallRail integration — polls every 30 min, matches voicemails to GHL contacts, classifies urgency, routes to right team member.'}
-  ]},
-  {id:'signals',name:'Pipeline Intelligence',apiId:'signals-v2',engineKey:'signals',bots:[
-    {name:'Signals V2 Deep Scan',icon:'🔬',desc:'Every 4 hours — comprehensive pipeline analysis. Detects competitor mentions, stall tactics, pricing disconnects, and hidden opportunities across all conversations.'}
+  {id:'task-manager',name:'Task Manager',apiId:'task-manager',engineKey:'task_manager',bots:[
+    {name:'Task Manager Bot',icon:'📋',desc:'Centralized task creation for all engines. 2-hour dedup window prevents duplicate tasks. Assigns to correct team member, sets due dates, tracks completion.'},
   ]},
   {id:'message-intel',name:'Message Intelligence',apiId:'message-intel',engineKey:'message_intel',bots:[
-    {name:'Response Tracker',icon:'📊',desc:'Tracks response rates, sentiment, and timing across all SMS templates. Pure data collection — a separate Message Optimizer agent reads this data and acts on it.'}
+    {name:'Response Tracker',icon:'📊',desc:'Tracks response rates, sentiment, and timing across all SMS. Pure data collection — feeds Message Optimizer for analysis.'},
   ]},
   {id:'message-optimizer',name:'Message Optimizer',apiId:'message-optimizer',engineKey:'message_optimizer',bots:[
-    {name:'Template Auditor',icon:'🔍',desc:'Daily audit of all SMS templates. Flags underperformers, detects negative patterns, recommends replacements based on what\'s actually working.'},
-    {name:'Performance Coach',icon:'🏋️',desc:'Weekly digest of messaging performance. Source-specific insights, time-of-day optimization, conversion trends. Makes your outreach smarter every week.'}
+    {name:'Template Auditor',icon:'🔧',desc:'Daily analysis at 6am. Flags underperforming SMS templates, detects negative patterns, recommends replacements based on real response data.'},
+  ]},
+
+  // ─── EXECUTION BOTS (agents think, bots do) ───
+  {id:'message-queue',name:'Message Queue',apiId:'message-queue',engineKey:'message_queue',bots:[
+    {name:'Message Queue Bot',icon:'📨',desc:'ALL outbound SMS + email routes through here. Send windows (9am-7pm weekdays), 2-hour dedup, priority queue, handoff detection. If a human is talking, the bot backs off.'},
+  ]},
+  {id:'opp-conductor',name:'Opportunity Conductor',apiId:'opportunity-conductor',engineKey:'opportunity_conductor',bots:[
+    {name:'Opportunity Conductor',icon:'🎯',desc:'Single authority on CRM state. Pipeline moves, user assignment, contact locking, agent directing (which engines own which contact). Zero direct GHL mutations from agents — everything goes through here.'},
+  ]},
+
+  // ─── DRY-RUN ENGINES (built, not yet active) ───
+  {id:'followup',name:'Follow-Up Bot — $199/mo',apiId:'followup',engineKey:'follow_up',bots:[
+    {name:'Entry Router',icon:'🚪',desc:'Routes contacts from Sales Process → Follow Up pipeline. Handles tagging, Working Drip removal, opportunity creation. Triggers on pipeline stage changes.'},
+    {name:'Follow-Up Organizer',icon:'📋',desc:'Brain of the follow-up system. Motivation scoring (0-10, 5 factors), delta analysis, competitor/MLS detection, bucket validation. Daily sweep at 7am + conversation-triggered.'},
+    {name:'Follow-Up Messenger',icon:'💬',desc:'Personalized re-engagement SMS + email for 4 Month and 12 Month buckets. 35/day cap, prioritizes most neglected contacts. 3-round drip per cycle with craftMessage() personalization. 1 Month stays manual (team handles).'},
+    {name:'Follow-Up Closer',icon:'🔥',desc:'STUB — converts re-engaged leads (7+ motivation) back to Sales Process. Books appointments via Appointment Bot, creates handoff tasks. Waiting for Appointment Bot to go live.'},
+  ]},
+  {id:'appointment-bot',name:'Appointment Bot',apiId:'appointment-bot',engineKey:'appointment_bot',bots:[
+    {name:'Appointment Bot',icon:'📅',desc:'DRY RUN — availability checking, conflict prevention, auto-find slots, confirmation SMS, day-before + 1-hour reminders, no-show detection, win-back SMS. Drive time buffer for Kyle.'},
+  ]},
+
+  // ─── SCANNING ENGINES (always running) ───
+  {id:'crm-scanner',name:'CRM Scanner',apiId:'crm-scanner',engineKey:'crm_scanner',bots:[
+    {name:'Pipeline Signals',icon:'📡',desc:'14 detection rules across 3 tiers (Missed/At Risk/Worth a Look). Scans pipeline health hourly.'},
+    {name:'Ghosted Detector',icon:'👻',desc:'12 days + 15 outbound attempts with 0 real replies = Ghosted. Moves to Ghosted stage via Opportunity Conductor.'},
+    {name:'Walkthrough SLA',icon:'🏃',desc:'24h+ stuck in Walkthrough Apt Scheduled = breach. AM offer task created 3h after walkthrough ends.'},
+  ]},
+  {id:'signals',name:'Pipeline Signals V2',apiId:'signals-v2',engineKey:'signals',bots:[
+    {name:'Deep Scan',icon:'🔬',desc:'Every 4 hours — comprehensive lost deal audit. Detects competitor mentions, stall tactics, pricing disconnects across all conversations.'},
   ]},
   {id:'speed-to-lead',name:'Speed to Lead',apiId:'speed-to-lead',engineKey:'speed_to_lead',bots:[
-    {name:'Response Timer',icon:'⏱️',desc:'Tracks time from lead arrival to first contact attempt. Measures per team member, per source, daily averages. The #1 metric for conversion.'},
-    {name:'SLA Monitor',icon:'🏁',desc:'Tracks what percentage of leads get contacted within 15 min, 30 min, 60 min. Identifies bottlenecks in the response chain.'}
+    {name:'Response Timer',icon:'⏱️',desc:'Tracks lead arrival → first contact. Per team member, per source. The #1 metric for conversion.'},
   ]},
+  {id:'reporting',name:'Data & Reporting',apiId:'reporting',engineKey:'reporting',bots:[
+    {name:'KPI Calculator',icon:'📊',desc:'Hourly KPI calculation from GHL data — leads, calls, appointments, offers, contracts. Daily/weekly/monthly reports.'},
+    {name:'Team Digest',icon:'👥',desc:'Hourly activity digest — who\'s active, call volumes, conversation counts.'},
+  ]},
+  {id:'scheduling',name:'Scheduling',apiId:'scheduling',engineKey:'scheduling',bots:[
+    {name:'Scheduling Coordinator',icon:'🗓️',desc:'Manages AM availability, prevents double-booking, detects calendar conflicts.'},
+    {name:'Callback Capture',icon:'📲',desc:'Monitors voicemails and missed calls. Auto-creates call tasks assigned to the right team member.'},
+  ]},
+  {id:'deals',name:'Documents & Deals',apiId:'deals',engineKey:'deals',bots:[
+    {name:'Contract Tracker',icon:'📝',desc:'Monitors Under Contract stage. Tracks signature status, deadlines, closing timeline.'},
+    {name:'Deal Packaging',icon:'📦',desc:'Scores deal completeness (photos, ARV, repairs, comps). Signals "ready to market" for distribution.'},
+  ]},
+  {id:'voicemail',name:'Voicemail Processing',apiId:'voicemail',engineKey:'voicemail',bots:[
+    {name:'Voicemail Bot',icon:'🎤',desc:'CallRail integration — polls every 30 min, matches voicemails to GHL contacts, classifies urgency, routes to team.'},
+  ]},
+  {id:'dispo-lead-gen',name:'Dispo Lead Gen',apiId:'buyer-lead-gen',engineKey:'buyer_leadgen',bots:[
+    {name:'Deal Packager',icon:'📦',desc:'Scores completeness, auto-generates PDF + email template. Signals "ready to market".'},
+    {name:'Schedule Engine',icon:'📅',desc:'Weekly cadence: Mon/Tue exclusive, Wed public blast, Thu/Fri inbound + hunts.'},
+    {name:'Platform Distributor',icon:'🚀',desc:'Pushes to InvestorLift, Mevlo, Facebook. Tracks views and responses.'},
+    {name:'Buyer Hunt Support',icon:'🎯',desc:'Generates outreach lists for listing agents near deal. Pre-writes scripts.'},
+    {name:'48-Hour Clock',icon:'⏰',desc:'Tracks marketing start, escalates at 12h/24h/36h/48h if no buyer interest.'},
+  ]},
+
+  // ─── PLANNED / EXTERNAL ───
   {id:'standalone',name:'Planned / External',apiId:null,engineKey:null,bots:[
-    {name:'PPL Refund Bot',icon:'💰',desc:'Files lead disputes on PropertyLeads and MotivatedSellers. Needs Playwright automation (no API). Two disputes filed so far ($300 potential refunds).'},
-    {name:'Market Watch Bot',icon:'🔍',desc:'Tracks market trends, comparable sales, and pricing shifts. Daily market intelligence for acquisition decisions.'},
-    {name:'MLS Monitor Bot',icon:'🏠',desc:'Monitors MLS for pipeline properties that get listed. Alerts team when a deal property shows up on market.'}
+    {name:'PPL Refund Bot',icon:'💰',desc:'Files lead disputes on PropertyLeads and MotivatedSellers. Playwright automation. One dispute filed ($150 potential).'},
+    {name:'ARV Assistant',icon:'🏗️',desc:'Grades properties from Street View, calculates construction budget using NAH franchise grading system. Saves 1.5-2.5 hrs/day.'},
+    {name:'Market Watch Bot',icon:'📈',desc:'Tracks market trends, comparable sales, pricing shifts. Daily market intelligence for acquisition decisions.'},
+    {name:'MLS Monitor Bot',icon:'🏠',desc:'Monitors MLS for pipeline properties that get listed. Alerts team when a deal property appears on market.'},
   ]}
 ];
 
