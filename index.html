@@ -428,6 +428,10 @@ const engineLayout = [
   {id:'message-intel',name:'Message Intelligence',apiId:'message-intel',engineKey:'message_intel',bots:[
     {name:'Response Tracker',icon:'📊',desc:'Tracks response rates, sentiment, and timing across all SMS templates. Pure data collection — a separate Message Optimizer agent reads this data and acts on it.'}
   ]},
+  {id:'message-optimizer',name:'Message Optimizer',apiId:'message-optimizer',engineKey:'message_optimizer',bots:[
+    {name:'Template Auditor',icon:'🔍',desc:'Daily audit of all SMS templates. Flags underperformers, detects negative patterns, recommends replacements based on what\'s actually working.'},
+    {name:'Performance Coach',icon:'🏋️',desc:'Weekly digest of messaging performance. Source-specific insights, time-of-day optimization, conversion trends. Makes your outreach smarter every week.'}
+  ]},
   {id:'standalone',name:'Planned / External',apiId:null,engineKey:null,bots:[
     {name:'PPL Refund Bot',icon:'💰',desc:'Files lead disputes on PropertyLeads and MotivatedSellers. Needs Playwright automation (no API). Two disputes filed so far ($300 potential refunds).'},
     {name:'Market Watch Bot',icon:'🔍',desc:'Tracks market trends, comparable sales, and pricing shifts. Daily market intelligence for acquisition decisions.'},
