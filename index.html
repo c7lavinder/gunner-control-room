@@ -291,6 +291,70 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
     </div>
   </section>
 
+  <!-- Follow-Up Bot Flow -->
+  <section class="pipeline-section" id="followup-flow">
+    <div class="pipeline-header">
+      <h2>🔄 Follow-Up Bot</h2>
+      <span class="pipeline-badge" style="background:rgba(234,179,8,0.15);color:var(--yellow);border:1px solid rgba(234,179,8,0.3)">BUILDING</span>
+      <span style="font-size:12px;color:var(--text-dim);margin-left:auto">$199/mo bundle — 3 engines</span>
+    </div>
+    <div class="pipeline-flow">
+      <div class="pipeline-stage">
+        <div class="stage-pill" style="background:rgba(168,85,247,0.15);border-color:rgba(168,85,247,0.4);color:var(--purple)">📥 Lead Enters Follow-Up</div>
+        <div class="stage-count">1 Month · 4 Month · 1 Year</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <div class="stage-pill">📋 Organizer</div>
+        <div class="stage-count">Right bucket · Clean data · Tasks</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-stage">
+        <div class="stage-pill">💬 Messenger</div>
+        <div class="stage-count">Adaptive messaging · Reads signals</div>
+      </div>
+      <div class="pipeline-arrow">→</div>
+      <div class="pipeline-split">
+        <div class="split-branch">
+          <div class="branch-label" style="background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.3)">🔥 Re-engaged</div>
+          <div class="branch-channels">
+            <span class="channel-tag">→ Appointment Booker</span>
+            <span class="channel-tag">→ Walkthrough with AM</span>
+          </div>
+        </div>
+        <div class="split-branch">
+          <div class="branch-label" style="background:rgba(59,130,246,0.15);color:var(--blue);border:1px solid rgba(59,130,246,0.3)">🌡️ Warming Up</div>
+          <div class="branch-channels">
+            <span class="channel-tag">Increase intensity</span>
+            <span class="channel-tag">More frequent touches</span>
+          </div>
+        </div>
+        <div class="split-branch">
+          <div class="branch-label" style="background:rgba(234,179,8,0.15);color:var(--yellow);border:1px solid rgba(234,179,8,0.3)">❄️ Still Cold</div>
+          <div class="branch-channels">
+            <span class="channel-tag">Light touches</span>
+            <span class="channel-tag">Longer intervals</span>
+          </div>
+        </div>
+        <div class="split-branch">
+          <div class="branch-label" style="background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.3)">🚫 Dead</div>
+          <div class="branch-channels">
+            <span class="channel-tag">Stop messaging</span>
+            <span class="channel-tag">Archive</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="schedule-bar">
+      <div class="schedule-title">Three Goals</div>
+      <div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap;padding:8px 0">
+        <span style="padding:8px 14px;border-radius:8px;background:rgba(34,197,94,0.2);color:var(--green);font-size:12px;font-weight:600">1. Re-ignite interest</span>
+        <span style="padding:8px 14px;border-radius:8px;background:rgba(59,130,246,0.2);color:var(--blue);font-size:12px;font-weight:600">2. Sort by motivation</span>
+        <span style="padding:8px 14px;border-radius:8px;background:rgba(168,85,247,0.2);color:var(--purple);font-size:12px;font-weight:600">3. Book appointments</span>
+      </div>
+    </div>
+  </section>
+
   <!-- Dispo Pipeline Section -->
   <section class="pipeline-section" id="dispo-pipeline">
     <div class="pipeline-header">
@@ -388,12 +452,10 @@ const engineLayout = [
     {name:'Ghosted Lead Detector',icon:'👻',desc:'Identifies leads with 4+ outbound attempts and 0 inbound replies over 10+ days. Separates truly ghosted from just slow.'},
     {name:'Walkthrough SLA',icon:'🏃',desc:'Monitors time between appointment set and walkthrough completion. Flags delays that could lose motivated sellers.'}
   ]},
-  {id:'nurture',name:'Nurture & Timing',apiId:'nurture',engineKey:'nurture',bots:[
-    {name:'Follow Up Bot',icon:'🔄',desc:'Full lifecycle replacement for GHL follow-up workflows. Auto-discovers dispositions from activity, manages 1-month/4-month/1-year nurture cycles.'},
-    {name:'Workflow Shadow',icon:'🔮',desc:'Shadows all 3 GHL workflows (1 Month, 4 Month, 1 Year) in parallel with A/B SMS template rotation. Ready to replace when DRY_RUN flips.'},
-    {name:'After-Hours Bot',icon:'🌙',desc:'Engages inbound leads during off-hours with intelligent responses. Qualifies and schedules callbacks for the team.'},
-    {name:'Seller Re-engagement',icon:'🔁',desc:'Re-engages declined sellers with timed follow-ups. Monitors for signals that seller motivation may have changed.'},
-    {name:'Appointment Bot',icon:'📅',desc:'Catches no-shows, sends confirmations, manages reschedules. Integrates with team calendars for real-time availability.'}
+  {id:'followup',name:'Follow-Up Bot — $199/mo',apiId:'followup',engineKey:'followup',bots:[
+    {name:'Follow-Up Organizer',icon:'📋',desc:'Keeps every lead in the right follow-up bucket. Reads engagement signals to move leads between intensity tiers. Accurate notes via Call Summary, accurate tasks via Task Manager. The brain that puts the messenger in position to succeed.'},
+    {name:'Follow-Up Messenger',icon:'💬',desc:'Intelligent nurture messaging that adapts to each seller. Hot leads get frequent, direct touches. Cold leads get lighter, longer-spaced touches. Varies approach — market updates, social proof, direct asks. Way beyond a dumb drip.'},
+    {name:'Appointment Booker',icon:'📅',desc:'The closer. When engagement signals are warm enough, takes over from Messenger and pushes toward booking a walkthrough with the AM. Handles scheduling, confirmations, and no-show follow-up.'}
   ]},
   {id:'scheduling',name:'Scheduling',apiId:'scheduling',engineKey:'scheduling',bots:[
     {name:'Scheduling Coordinator',icon:'🗓️',desc:'Manages AM availability, prevents double-booking, detects calendar mismatches between GHL and team schedules.'},
