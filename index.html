@@ -261,7 +261,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="split-branch">
           <div class="branch-label" style="background:rgba(234,179,8,0.15);color:var(--yellow);border:1px solid rgba(234,179,8,0.3)">📵 No Answer</div>
           <div class="branch-channels">
-            <span class="channel-tag">Working Drip activates</span>
+            <span class="channel-tag">New Lead Drip activates</span>
             <span class="channel-tag">104-day SMS + email</span>
           </div>
         </div>
@@ -282,7 +282,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
         <span style="color:var(--text-dim)">→</span>
         <span style="padding:8px 14px;border-radius:8px;background:rgba(168,85,247,0.2);color:var(--purple);font-size:12px;font-weight:600">3. New Lead Responder SMS</span>
         <span style="color:var(--text-dim)">→</span>
-        <span style="padding:8px 14px;border-radius:8px;background:rgba(234,179,8,0.2);color:var(--yellow);font-size:12px;font-weight:600">4. Working Drip (if no response)</span>
+        <span style="padding:8px 14px;border-radius:8px;background:rgba(234,179,8,0.2);color:var(--yellow);font-size:12px;font-weight:600">4. New Lead Drip (if no response)</span>
       </div>
       <div class="schedule-legend">
         <div class="legend-item"><div class="legend-dot green"></div>Triggers on: Sales Process → New Lead stage (sellers only)</div>
@@ -468,14 +468,14 @@ const engineLayout = [
   ]},
 
   // ─── WORKING LEADS ───
-  {id:'working-drip',name:'Working Leads Drip',apiId:'working-drip',engineKey:'working_drip',bots:[
+  {id:'new-lead-drip',name:'New Lead Drip',apiId:'new-lead-drip',engineKey:'new_lead_drip',bots:[
     {name:'104-Day Drip Engine',icon:'📲',readiness:'review',desc:'SMS + email sequence for leads that didn\'t answer first call. 26 touchpoints over 104 days. Stops on reply or DNC.'},
     {name:'Reply Classifier',icon:'🔍',readiness:'review',desc:'3-bucket classifier: real reply → stop drip, brush-off → continue, DNC → stop + flag.'},
   ]},
 
   // ─── FOLLOW-UP ───
   {id:'followup',name:'Follow-Up System',apiId:'followup',engineKey:'follow_up',bots:[
-    {name:'Entry Router',icon:'🚪',readiness:'testing',desc:'Routes contacts from Sales Process → Follow Up pipeline. Handles tagging, Working Drip removal.'},
+    {name:'Entry Router',icon:'🚪',readiness:'testing',desc:'Routes contacts from Sales Process → Follow Up pipeline. Handles tagging, New Lead Drip removal.'},
     {name:'Organizer',icon:'📋',readiness:'testing',desc:'Motivation scoring (0-10), delta analysis, competitor/MLS detection. Daily sweep at 7am.'},
     {name:'Messenger',icon:'💬',readiness:'testing',desc:'Personalized re-engagement SMS + email for 4 Month and 12 Month buckets. 35/day cap.'},
     {name:'Closer',icon:'🔥',readiness:'built',desc:'Converts re-engaged leads back to Sales Process. Needs Appointment Bot live first.'},
