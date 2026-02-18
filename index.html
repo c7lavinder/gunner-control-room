@@ -166,9 +166,9 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
       <div class="connection-badge disconnected" id="conn-badge">🔴 Connecting…</div>
       <span class="last-refresh" id="last-refresh"></span>
       <div class="stats-bar">
-        <div class="stat"><div class="dot green"></div><div><div class="num" id="cnt-online">0</div><div class="label">Online</div></div></div>
-        <div class="stat"><div class="dot yellow"></div><div><div class="num" id="cnt-idle">0</div><div class="label">Standby</div></div></div>
-        <div class="stat"><div class="dot red"></div><div><div class="num" id="cnt-offline">0</div><div class="label">Dry Run</div></div></div>
+        <div class="stat"><div class="dot green"></div><div><div class="num" id="cnt-online">0</div><div class="label">Approved</div></div></div>
+        <div class="stat"><div class="dot yellow"></div><div><div class="num" id="cnt-idle">0</div><div class="label">Ready for Review</div></div></div>
+        <div class="stat"><div class="dot red"></div><div><div class="num" id="cnt-offline">0</div><div class="label">Building / Testing</div></div></div>
         <div class="stat"><div><div class="num" id="cnt-total">0</div><div class="label">Total Bots</div></div></div>
       </div>
     </div>
@@ -446,84 +446,89 @@ const API = 'https://gunner-engine-production.up.railway.app';
 // Static bot definitions (layout + descriptions). Real status comes from API.
 // engineKey maps to ENGINE_<KEY>=active env vars on Railway
 // Consolidated: no single-bot groups. Logical grouping by function.
+// Readiness levels: 'built' → 'testing' → 'review' → 'approved'
+// built = just coded, not tested yet
+// testing = running in test mode, collecting data
+// review = ready for Corey to review and approve
+// approved = Corey approved, ready to go live
 const engineLayout = [
   // ─── NEW LEAD PROCESSING ───
   {id:'new-lead-chain',name:'New Lead Processing',apiId:'lead-iq',engineKey:'lead_iq',bots:[
-    {name:'Data Cleaner',icon:'🧹',desc:'Validates data, normalizes names, standardizes addresses. Adds market/state/source tags. Pulls mailing address from RentCast. Event-driven on New Lead.'},
-    {name:'Lead IQ Scorer',icon:'🧠',desc:'Scores every new lead on 5 factors (timeline, condition, price, motivation, source). Assigns HOT/WARM, routes to team, moves pipeline stage.'},
-    {name:'Lead Watchdog',icon:'🐕',desc:'Monitors new lead SLA — flags untouched leads at 15 min, escalates to Jessica at 30 min. Ensures no PPL lead ($125-150) gets missed.'},
-    {name:'New Lead Responder',icon:'⚡',desc:'Fires immediate SMS to every scored lead via Message Queue. Time-aware — morning: "giving you a call shortly", evening: "tomorrow morning?". Source-branched for PPL vs dialer vs forms.'},
-    {name:'Speed to Lead',icon:'⏱️',desc:'Tracks lead arrival → first contact. Per team member, per source. The #1 metric for conversion.'},
+    {name:'Data Cleaner',icon:'🧹',readiness:'review',desc:'Validates data, normalizes names. Adds market/state/source tags. Pulls mailing address from RentCast.'},
+    {name:'Lead IQ Scorer',icon:'🧠',readiness:'testing',desc:'Scores every new lead on 5 factors. Assigns HOT/WARM, routes to team, moves pipeline stage.'},
+    {name:'Lead Watchdog',icon:'🐕',readiness:'testing',desc:'Monitors new lead SLA — flags untouched leads at 15 min, escalates to Jessica at 30 min.'},
+    {name:'New Lead Responder',icon:'⚡',readiness:'testing',desc:'Fires immediate SMS to every scored lead. Time-aware messaging. Source-branched for PPL vs dialer vs forms.'},
+    {name:'Speed to Lead',icon:'⏱️',readiness:'testing',desc:'Tracks lead arrival → first contact. Per team member, per source.'},
   ]},
 
   // ─── CALL & CONVERSATION ───
   {id:'call-conversation',name:'Call & Conversation',apiId:'call-summary',engineKey:'call_summary',bots:[
-    {name:'Call Summary',icon:'📞',desc:'Processes completed calls (60s+, both parties spoke). Generates rich summaries with property details, motivation, timeline, next steps. Notes only — no tags.'},
-    {name:'Disposition Advisor',icon:'🎯',desc:'SILENT — analyzes every completed call and recommends follow-up bucket (Stay / 1 Month / 4 Month / 12 Month). Building audit data before going live.'},
-    {name:'Voicemail Bot',icon:'🎤',desc:'CallRail integration — polls every 30 min, matches voicemails to GHL contacts, classifies urgency, routes to team.'},
+    {name:'Call Summary',icon:'📞',readiness:'review',desc:'Generates rich call summaries with property details, motivation, timeline, next steps. Notes only — no tags.'},
+    {name:'Disposition Advisor',icon:'🎯',readiness:'built',desc:'Analyzes calls and recommends follow-up bucket. Building audit data before going live.'},
+    {name:'Voicemail Bot',icon:'🎤',readiness:'testing',desc:'CallRail integration — polls every 30 min, matches voicemails to GHL contacts, classifies urgency.'},
   ]},
 
   // ─── WORKING LEADS ───
   {id:'working-drip',name:'Working Leads Drip',apiId:'working-drip',engineKey:'working_drip',bots:[
-    {name:'104-Day Drip Engine',icon:'📲',desc:'Automated SMS + email sequence for leads that didn\'t answer first call. 26 touchpoints over 104 days. Stops on real reply or DNC.'},
-    {name:'Reply Classifier',icon:'🔍',desc:'3-bucket classifier: real reply → stop drip, brush-off → continue, DNC → stop + flag.'},
+    {name:'104-Day Drip Engine',icon:'📲',readiness:'review',desc:'SMS + email sequence for leads that didn\'t answer first call. 26 touchpoints over 104 days. Stops on reply or DNC.'},
+    {name:'Reply Classifier',icon:'🔍',readiness:'review',desc:'3-bucket classifier: real reply → stop drip, brush-off → continue, DNC → stop + flag.'},
   ]},
 
   // ─── FOLLOW-UP ───
   {id:'followup',name:'Follow-Up System',apiId:'followup',engineKey:'follow_up',bots:[
-    {name:'Entry Router',icon:'🚪',desc:'Routes contacts from Sales Process → Follow Up pipeline. Handles tagging, Working Drip removal, opportunity creation.'},
-    {name:'Organizer',icon:'📋',desc:'Motivation scoring (0-10), delta analysis, competitor/MLS detection, bucket validation. Daily sweep at 7am.'},
-    {name:'Messenger',icon:'💬',desc:'Personalized re-engagement SMS + email for 4 Month and 12 Month buckets. 35/day cap. 1 Month stays manual.'},
-    {name:'Closer',icon:'🔥',desc:'STUB — converts re-engaged leads (7+ motivation) back to Sales Process. Waiting for Appointment Bot.'},
+    {name:'Entry Router',icon:'🚪',readiness:'testing',desc:'Routes contacts from Sales Process → Follow Up pipeline. Handles tagging, Working Drip removal.'},
+    {name:'Organizer',icon:'📋',readiness:'testing',desc:'Motivation scoring (0-10), delta analysis, competitor/MLS detection. Daily sweep at 7am.'},
+    {name:'Messenger',icon:'💬',readiness:'testing',desc:'Personalized re-engagement SMS + email for 4 Month and 12 Month buckets. 35/day cap.'},
+    {name:'Closer',icon:'🔥',readiness:'built',desc:'Converts re-engaged leads back to Sales Process. Needs Appointment Bot live first.'},
   ]},
 
   // ─── APPOINTMENTS & SCHEDULING ───
   {id:'scheduling',name:'Appointments & Scheduling',apiId:'scheduling',engineKey:'scheduling',bots:[
-    {name:'Appointment Bot',icon:'📅',desc:'Availability checking, conflict prevention, confirmation SMS, day-before + 1-hour reminders, no-show detection. Drive time buffer for Kyle.'},
-    {name:'Scheduling Coordinator',icon:'🗓️',desc:'Manages AM availability, prevents double-booking, detects calendar conflicts.'},
-    {name:'Callback Capture',icon:'📲',desc:'Monitors voicemails and missed calls. Auto-creates call tasks assigned to the right team member.'},
+    {name:'Appointment Bot',icon:'📅',readiness:'built',desc:'Confirmation SMS, day-before + 1-hour reminders, no-show detection. Drive time buffer for Kyle.'},
+    {name:'Scheduling Coordinator',icon:'🗓️',readiness:'built',desc:'Manages AM availability, prevents double-booking, detects calendar conflicts.'},
+    {name:'Callback Capture',icon:'📲',readiness:'testing',desc:'Monitors voicemails and missed calls. Auto-creates call tasks for the right team member.'},
   ]},
 
   // ─── DEALS & DISPO ───
   {id:'deals',name:'Deals & Distribution',apiId:'deals',engineKey:'deals',bots:[
-    {name:'Contract Tracker',icon:'📝',desc:'Triggers on Under Contract in Sales Process. Tracks signature status, deadlines, closing timeline.'},
-    {name:'Deal Packaging',icon:'📦',desc:'Scores deal completeness (photos, ARV, repairs, comps). Signals "ready to market" for distribution.'},
-    {name:'Deal Packager',icon:'📦',desc:'Scores completeness, auto-generates PDF + email template. Signals "ready to market".'},
-    {name:'Schedule Engine',icon:'📅',desc:'Weekly cadence: Mon/Tue exclusive, Wed public blast, Thu/Fri inbound + hunts.'},
-    {name:'Platform Distributor',icon:'🚀',desc:'Pushes to InvestorLift, Mevlo, Facebook. Tracks views and responses.'},
-    {name:'Buyer Hunt Support',icon:'🎯',desc:'Generates outreach lists for listing agents near deal. Pre-writes scripts.'},
-    {name:'48-Hour Clock',icon:'⏰',desc:'Tracks marketing start, escalates at 12h/24h/36h/48h if no buyer interest.'},
+    {name:'Contract Tracker',icon:'📝',readiness:'review',desc:'Triggers on Under Contract only. Tracks signature status, deadlines, closing timeline.'},
+    {name:'Deal Packaging',icon:'📦',readiness:'review',desc:'Scores deal completeness (photos, ARV, repairs, comps). Signals "ready to market".'},
+    {name:'Deal Packager',icon:'📦',readiness:'testing',desc:'Auto-generates PDF + email template for distribution.'},
+    {name:'Schedule Engine',icon:'📅',readiness:'built',desc:'Weekly cadence: Mon/Tue exclusive, Wed public blast, Thu/Fri inbound + hunts.'},
+    {name:'Platform Distributor',icon:'🚀',readiness:'built',desc:'Pushes to InvestorLift, Mevlo, Facebook. Tracks views and responses.'},
+    {name:'Buyer Hunt Support',icon:'🎯',readiness:'built',desc:'Generates outreach lists for listing agents near deal. Pre-writes scripts.'},
+    {name:'48-Hour Clock',icon:'⏰',readiness:'built',desc:'Tracks marketing start, escalates at 12h/24h/36h/48h if no buyer interest.'},
   ]},
 
   // ─── PIPELINE MONITORING ───
   {id:'monitoring',name:'Pipeline Monitoring',apiId:'crm-scanner',engineKey:'crm_scanner',bots:[
-    {name:'Pipeline Signals',icon:'📡',desc:'14 detection rules across 3 tiers (Missed/At Risk/Worth a Look). Scans pipeline health hourly.'},
-    {name:'Deep Scan',icon:'🔬',desc:'Every 4 hours — comprehensive lost deal audit. Detects competitor mentions, stall tactics, pricing disconnects.'},
-    {name:'Ghosted Detector',icon:'👻',desc:'12 days + 15 outbound attempts with 0 real replies = Ghosted. Moves to Ghosted stage.'},
-    {name:'Walkthrough SLA',icon:'🏃',desc:'24h+ stuck in Walkthrough Apt Scheduled = breach. AM offer task created 3h after walkthrough ends.'},
+    {name:'Pipeline Signals',icon:'📡',readiness:'testing',desc:'14 detection rules across 3 tiers (Missed/At Risk/Worth a Look). Scans pipeline health hourly.'},
+    {name:'Deep Scan',icon:'🔬',readiness:'testing',desc:'Every 4 hours — comprehensive lost deal audit. Detects competitor mentions, stall tactics, pricing disconnects.'},
+    {name:'Ghosted Detector',icon:'👻',readiness:'testing',desc:'12 days + 15 outbound attempts with 0 real replies = Ghosted. Moves to Ghosted stage.'},
+    {name:'Walkthrough SLA',icon:'🏃',readiness:'testing',desc:'24h+ stuck in Walkthrough Apt Scheduled = breach. AM offer task created 3h after walkthrough ends.'},
   ]},
 
   // ─── MESSAGING & TASKS ───
   {id:'messaging',name:'Messaging & Tasks',apiId:'message-queue',engineKey:'message_queue',bots:[
-    {name:'Message Queue',icon:'📨',desc:'ALL outbound SMS + email routes through here. Send windows (9am-7pm), dedup, priority queue. Backs off when human is talking.'},
-    {name:'Task Manager',icon:'📋',desc:'Centralized task creation for all engines. 2-hour dedup window. Assigns to correct team member.'},
-    {name:'Opportunity Conductor',icon:'🎯',desc:'Single authority on CRM state. Pipeline moves, user assignment, contact locking.'},
-    {name:'Message Optimizer',icon:'🔧',desc:'Daily analysis at 6am. Flags underperforming SMS templates, recommends replacements.'},
+    {name:'Message Queue',icon:'📨',readiness:'review',desc:'ALL outbound SMS + email routes through here. Send windows (9am-7pm), dedup, priority queue. Backs off when human is talking.'},
+    {name:'Task Manager',icon:'📋',readiness:'review',desc:'Centralized task creation for all engines. 2-hour dedup window. Assigns to correct team member.'},
+    {name:'Opportunity Conductor',icon:'🎯',readiness:'testing',desc:'Single authority on CRM state. Pipeline moves, user assignment, contact locking.'},
+    {name:'Message Optimizer',icon:'🔧',readiness:'testing',desc:'Daily analysis at 6am. Flags underperforming SMS templates, recommends replacements.'},
   ]},
 
   // ─── REPORTING & KPIs ───
   {id:'reporting',name:'Reporting & KPIs',apiId:'reporting',engineKey:'reporting',bots:[
-    {name:'KPI Calculator',icon:'📊',desc:'Tracks total leads, net leads, appointments, offers, contracts, deals closed — by source and market. Hourly.'},
-    {name:'Offer Logger',icon:'💵',desc:'Kyle texts "offer [address] [amount]" to log in-person offers. 90-day dedup per contact.'},
-    {name:'Team Digest',icon:'👥',desc:'Hourly activity digest — who\'s active, call volumes, conversation counts.'},
+    {name:'KPI Calculator',icon:'📊',readiness:'review',desc:'Tracks total leads, net leads, appointments, offers, contracts, deals closed — by source and market.'},
+    {name:'Offer Logger',icon:'💵',readiness:'review',desc:'Kyle texts "offer [address] [amount]" to log in-person offers. 90-day dedup per contact.'},
+    {name:'Team Digest',icon:'👥',readiness:'testing',desc:'Hourly activity digest — who\'s active, call volumes, conversation counts.'},
   ]},
 
-  // ─── PLANNED / EXTERNAL ───
+  // ─── COMING SOON ───
   {id:'standalone',name:'Coming Soon',apiId:null,engineKey:null,bots:[
-    {name:'PPL Refund Bot',icon:'💰',desc:'Files lead disputes on PropertyLeads and MotivatedSellers. Playwright automation.'},
-    {name:'ARV Assistant',icon:'🏗️',desc:'Grades properties from Street View, calculates construction budget using NAH franchise grading system.'},
-    {name:'Market Watch',icon:'📈',desc:'Tracks market trends, comparable sales, pricing shifts. Daily market intelligence.'},
-    {name:'MLS Monitor',icon:'🏠',desc:'Alerts team when a pipeline property gets listed on MLS.'},
+    {name:'PPL Refund Bot',icon:'💰',readiness:'built',desc:'Files lead disputes on PropertyLeads and MotivatedSellers. Playwright automation.'},
+    {name:'ARV Assistant',icon:'🏗️',readiness:'built',desc:'Grades properties from Street View, calculates construction budget using NAH franchise grading system.'},
+    {name:'Market Watch',icon:'📈',readiness:'built',desc:'Tracks market trends, comparable sales, pricing shifts. Daily market intelligence.'},
+    {name:'MLS Monitor',icon:'🏠',readiness:'built',desc:'Alerts team when a pipeline property gets listed on MLS.'},
   ]}
 ];
 
@@ -625,9 +630,15 @@ function render() {
   engineLayout.forEach(eng => {
     const section = document.createElement('div');
     section.className = 'engine';
-    const engStatus = getEngineStatus(eng.apiId, eng.engineKey);
-    const statusLabel = engStatus === 'dry-run' ? 'DRY RUN' : connected && engStatus === 'online' ? 'LIVE' : connected && (engStatus === 'idle' || engStatus === 'standby') ? 'STANDBY' : 'OFFLINE';
-    const badgeClass = engStatus === 'dry-run' ? 'dryrun' : engStatus === 'online' ? 'online' : (engStatus === 'idle' || engStatus === 'standby') ? 'idle' : 'offline';
+    // Determine group readiness from individual bot readiness levels
+    const readinessOrder = {approved:4, review:3, testing:2, built:1};
+    const botReadiness = eng.bots.map(b => b.readiness || 'built');
+    const minReadiness = botReadiness.reduce((min, r) => readinessOrder[r] < readinessOrder[min] ? r : min, 'approved');
+    const maxReadiness = botReadiness.reduce((max, r) => readinessOrder[r] > readinessOrder[max] ? r : max, 'built');
+    const readinessLabels = {approved:'✅ APPROVED', review:'🟡 READY FOR REVIEW', testing:'🔵 TESTING', built:'⚪ FRESHLY BUILT'};
+    const readinessBadgeClass = {approved:'online', review:'idle', testing:'dryrun', built:'offline'};
+    const statusLabel = readinessLabels[maxReadiness] || 'BUILT';
+    const badgeClass = readinessBadgeClass[maxReadiness] || 'offline';
     const engInfo = engineData[eng.apiId];
     const lastScan = engInfo ? timeAgo(engInfo.lastRunTime) : '—';
     const actionCount = engInfo ? (engInfo.actionCount || 0) : 0;
@@ -642,31 +653,29 @@ function render() {
     const grid = document.getElementById('grid-' + eng.id);
 
     eng.bots.forEach(bot => {
-      const botStatus = getBotStatus(eng.apiId, eng.engineKey);
-      if (botStatus === 'online') totalOnline++;
-      else if (botStatus === 'idle' || botStatus === 'standby') totalIdle++;
-      else totalOffline++; // dry-run and offline both count as offline
+      const botReadiness = bot.readiness || 'built';
+      const readinessMap = {approved:'online', review:'idle', testing:'dryrun', built:'offline'};
+      const botDisplayStatus = readinessMap[botReadiness] || 'offline';
+      if (botReadiness === 'approved') totalOnline++;
+      else if (botReadiness === 'review') totalIdle++;
+      else totalOffline++;
 
       const card = document.createElement('div');
-      card.className = `desk status-${botStatus}`;
+      card.className = `desk status-${botDisplayStatus}`;
       const engInfo = engineData[eng.apiId];
       const engLogs = getEngineLogs(eng.apiId);
       const lastActionTime = engInfo && engInfo.lastActionTime ? timeAgo(engInfo.lastActionTime) : (engLogs[0] ? timeAgo(engLogs[0].timestamp) : '—');
       const lastActionText = engInfo && engInfo.lastAction ? engInfo.lastAction : '';
       const actionCount = engInfo ? (engInfo.actionCount || 0) : 0;
-      const statusText = botStatus === 'dry-run' ? '<span style="color:var(--yellow)">● DRY RUN</span>' : botStatus === 'online' ? '<span class="pulse online"></span>Online' : (botStatus === 'idle' || botStatus === 'standby') ? 'Standby' : 'Offline';
+      const readinessText = {
+        approved: '<span style="color:var(--green)">✅ Approved</span>',
+        review: '<span style="color:var(--yellow)">🟡 Ready for Review</span>',
+        testing: '<span style="color:var(--blue)">🔵 Testing</span>',
+        built: '<span style="color:var(--text-dim)">⚪ Freshly Built</span>'
+      };
+      const statusText = readinessText[botReadiness] || readinessText.built;
 
-      // Show last action, or monitoring message, or description
-      let cardDesc;
-      if (lastActionText) {
-        cardDesc = lastActionText.substring(0, 70) + (lastActionText.length > 70 ? '…' : '');
-      } else if (botStatus === 'dry-run') {
-        cardDesc = 'Logging only — not taking actions';
-      } else if (botStatus === 'online' || botStatus === 'idle' || botStatus === 'standby') {
-        cardDesc = 'Active — waiting for triggers';
-      } else {
-        cardDesc = bot.desc.substring(0, 60) + '…';
-      }
+      const cardDesc = bot.desc.substring(0, 80) + (bot.desc.length > 80 ? '…' : '');
 
       const actionBadge = actionCount > 0 ? `${actionCount} action${actionCount !== 1 ? 's' : ''}` : lastActionTime;
 
