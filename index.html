@@ -680,13 +680,13 @@ function render() {
       const actionBadge = actionCount > 0 ? `${actionCount} action${actionCount !== 1 ? 's' : ''}` : lastActionTime;
 
       card.innerHTML = `<div class="desk-top">
-        <div class="bot-avatar ${botStatus}">${bot.icon}<div class="status-dot ${botStatus}"></div></div>
+        <div class="bot-avatar ${botDisplayStatus}">${bot.icon}<div class="status-dot ${botDisplayStatus}"></div></div>
         <div class="desk-actions">${actionBadge}</div>
       </div>
       <div class="bot-name">${bot.name}</div>
       <div class="bot-desc">${cardDesc}</div>
       <div class="bot-meta">
-        <span class="bot-status-text ${botStatus}">${statusText}</span>
+        <span class="bot-status-text ${botDisplayStatus}">${statusText}</span>
       </div>`;
       card.onclick = () => openPanel(bot, eng);
       grid.appendChild(card);
@@ -700,25 +700,26 @@ function render() {
 }
 
 function openPanel(bot, eng) {
-  const botStatus = getBotStatus(eng.apiId, eng.engineKey);
-  document.getElementById('p-avatar').className = 'panel-avatar bot-avatar ' + botStatus;
+  const botReadiness = bot.readiness || 'built';
+  const readinessMap = {approved:'online', review:'idle', testing:'dryrun', built:'offline'};
+  const displayStatus = readinessMap[botReadiness] || 'offline';
+  document.getElementById('p-avatar').className = 'panel-avatar bot-avatar ' + displayStatus;
   document.getElementById('p-avatar').innerHTML = bot.icon;
   document.getElementById('p-name').textContent = bot.name;
   document.getElementById('p-engine').textContent = eng.name;
   document.getElementById('p-desc').textContent = bot.desc;
 
-  // Dry run badge — per-engine awareness
   const dryBadge = document.getElementById('p-dryrun');
-  const engineIsActive = botStatus === 'online' || botStatus === 'idle' || botStatus === 'standby';
-  if (engineIsActive) {
-    dryBadge.style.display = 'inline-block';
-    dryBadge.textContent = 'ACTIVE';
-    dryBadge.style.background = 'var(--green)';
+  const readinessLabels = {approved:'APPROVED', review:'READY FOR REVIEW', testing:'TESTING', built:'FRESHLY BUILT'};
+  const readinessColors = {approved:'var(--green)', review:'var(--yellow)', testing:'var(--blue)', built:'var(--text-dim)'};
+  dryBadge.style.display = 'inline-block';
+  dryBadge.textContent = readinessLabels[botReadiness] || 'BUILT';
+  dryBadge.style.background = readinessColors[botReadiness] || 'var(--text-dim)';
+  if (botReadiness === 'approved') {
     dryBadge.style.color = '#000';
-  } else if (dryRunMode) {
-    dryBadge.style.display = 'inline-block';
-    dryBadge.textContent = 'DRY RUN';
-    dryBadge.style.background = '';
+  } else if (botReadiness === 'review') {
+    dryBadge.style.color = '#000';
+  } else {
     dryBadge.style.color = '';
   } else {
     dryBadge.style.display = 'none';
@@ -729,11 +730,12 @@ function openPanel(bot, eng) {
   const mg = document.getElementById('p-metrics');
   mg.innerHTML = '';
   if (engInfo) {
+    const readinessEmoji = {approved:'✅', review:'🟡', testing:'🔵', built:'⚪'};
     const metrics = [
       { v: engInfo.actionCount || 0, l: 'Actions Today' },
-      { v: botStatus === 'online' ? '🟢' : (botStatus === 'idle' || botStatus === 'standby') ? '🟡' : botStatus === 'dry-run' ? '🟠' : '🔴', l: 'Status' },
+      { v: readinessEmoji[botReadiness] || '⚪', l: 'Readiness' },
       { v: engInfo.lastActionTime ? timeAgo(engInfo.lastActionTime) : '—', l: 'Last Action' },
-      { v: botStatus === 'dry-run' ? 'DRY RUN' : engineIsActive ? 'ACTIVE' : 'OFFLINE', l: 'Mode' }
+      { v: readinessLabels[botReadiness] || 'BUILT', l: 'Status' }
     ];
     metrics.forEach(m => {
       mg.innerHTML += `<div class="metric"><div class="val">${m.v}</div><div class="mlabel">${m.l}</div></div>`;
