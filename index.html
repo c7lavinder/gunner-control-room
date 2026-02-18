@@ -511,8 +511,12 @@ const engineLayout = [
     {name:'Message Queue',icon:'📨',readiness:'approved',desc:'ALL outbound SMS + email routes through here. Send windows (9am-7pm), dedup, priority queue. Cancels on reply/callback/call. Sends as assigned team member.'},
     {name:'Task Manager',icon:'📋',readiness:'approved',desc:'Centralized task creation for all engines. 2-hour dedup window. Assigns to correct team member.'},
     {name:'Opportunity Conductor',icon:'🎯',readiness:'testing',desc:'Single authority on CRM state. Pipeline moves, user assignment, contact locking.'},
-    {name:'Message Intelligence',icon:'📡',readiness:'approved',desc:'Passive tracker — logs every send, tracks reply rates per template/source/time. Powers the learning loop for New Lead Drip + Responder.'},
-    {name:'Message Optimizer',icon:'🔧',readiness:'approved',desc:'Daily analysis at 6am. Flags underperforming SMS templates, recommends replacements.'},
+  ]},
+
+  // ─── MESSAGE INTELLIGENCE ───
+  {id:'message-intelligence',name:'Message Intelligence',apiId:'message-intelligence',engineKey:'message_intelligence',bots:[
+    {name:'Reply Tracker',icon:'📡',readiness:'approved',desc:'Logs every outbound send + inbound reply. Tracks response rates per template, source, and time of day.'},
+    {name:'Message Optimizer',icon:'🔧',readiness:'approved',desc:'Daily analysis at 6am. Flags underperforming SMS templates, recommends replacements. Generates playbooks.'},
   ]},
 
   // ─── REPORTING & KPIs ───
