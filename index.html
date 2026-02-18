@@ -163,7 +163,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
       </div>
     </div>
     <div class="header-right">
-      <div class="connection-badge disconnected" id="conn-badge">🔴 Connecting…</div>
+      <div class="connection-badge disconnected" id="conn-badge">🟡 Loading…</div>
       <span class="last-refresh" id="last-refresh"></span>
       <div class="stats-bar">
         <div class="stat"><div class="dot green"></div><div><div class="num" id="cnt-online">0</div><div class="label">Approved</div></div></div>
@@ -441,7 +441,6 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 </main>
 
 <script>
-console.log('SCRIPT START');
 const API = 'https://gunner-engine-production.up.railway.app';
 
 // Static bot definitions (layout + descriptions). Real status comes from API.
@@ -548,14 +547,23 @@ function timeAgo(ts) {
   return Math.round(diff / 86400) + 'd ago';
 }
 
+function fetchWithTimeout(url, ms = 10000) {
+  const ctrl = new AbortController();
+  const tid = setTimeout(() => ctrl.abort(), ms);
+  return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(tid));
+}
+
 async function fetchData() {
   try {
+    const badge = document.getElementById('conn-badge');
+    if (!connected) { badge.textContent = '🟡 Loading…'; badge.className = 'connection-badge disconnected'; }
+
     const [statusRes, enginesRes, logsRes] = await Promise.all([
-      fetch(API + '/api/status'),
-      fetch(API + '/api/engines'),
-      fetch(API + '/api/logs/recent?limit=50')
+      fetchWithTimeout(API + '/api/status'),
+      fetchWithTimeout(API + '/api/engines'),
+      fetchWithTimeout(API + '/api/logs/recent?limit=50')
     ]);
-    if (!statusRes.ok || !enginesRes.ok) throw new Error('API error');
+    if (!statusRes.ok || !enginesRes.ok) throw new Error('API error ' + statusRes.status);
 
     const status = await statusRes.json();
     const engData = await enginesRes.json();
@@ -573,8 +581,9 @@ async function fetchData() {
   } catch (err) {
     console.error('Failed to fetch engine data:', err);
     connected = false;
-    updateConnectionBadge();
-    render();
+    const badge = document.getElementById('conn-badge');
+    badge.className = 'connection-badge disconnected';
+    badge.textContent = err.name === 'AbortError' ? '🔴 Timeout — retrying…' : '🔴 Disconnected — retrying…';
   }
 }
 
