@@ -469,9 +469,7 @@ const engineLayout = [
 
   // ─── WORKING LEADS ───
   {id:'new-lead-drip',name:'New Lead Drip',apiId:'new-lead-drip',engineKey:'new_lead_drip',bots:[
-    {name:'104-Day Drip Engine',icon:'📲',readiness:'approved',desc:'SMS + email sequence for leads that didn\'t answer first call. 26 touchpoints over 104 days. Stops on reply, callback, or DNC. Sends as assigned team member.'},
-    {name:'Reply Classifier',icon:'🔍',readiness:'approved',desc:'3-bucket classifier: real reply → stop drip, brush-off → continue, DNC → stop + flag.'},
-    {name:'Variation Picker',icon:'🧪',readiness:'approved',desc:'A/B tests message variations. Picks winners based on Message Intelligence response rates. Gets smarter over time.'},
+    {name:'104-Day Drip Engine',icon:'📲',readiness:'approved',desc:'SMS + email sequence for leads that didn\'t answer first call. 26 touchpoints over 104 days. Stops on reply, callback, or DNC. Classifies replies (real/brushoff/DNC). A/B tests variations. Sends as assigned team member.'},
   ]},
 
   // ─── FOLLOW-UP ───
