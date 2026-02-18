@@ -463,7 +463,7 @@ const engineLayout = [
 
   // ─── CALL & CONVERSATION ───
   {id:'call-conversation',name:'Call & Conversation',apiId:'call-summary',engineKey:'call_summary',bots:[
-    {name:'Call Summary',icon:'📞',readiness:'review',desc:'Generates rich call summaries with property details, motivation, timeline, next steps. Notes only — no tags.'},
+    {name:'Call Summary',icon:'📞',readiness:'approved',desc:'Generates rich call summaries with property details, motivation, timeline, next steps. Notes only — no tags.'},
     {name:'Voicemail Bot',icon:'🎤',readiness:'testing',desc:'CallRail integration — polls every 30 min, matches voicemails to GHL contacts, classifies urgency.'},
   ]},
 
@@ -508,8 +508,8 @@ const engineLayout = [
 
   // ─── MESSAGING & TASKS ───
   {id:'messaging',name:'Messaging & Tasks',apiId:'message-queue',engineKey:'message_queue',bots:[
-    {name:'Message Queue',icon:'📨',readiness:'review',desc:'ALL outbound SMS + email routes through here. Send windows (9am-7pm), dedup, priority queue. Backs off when human is talking.'},
-    {name:'Task Manager',icon:'📋',readiness:'review',desc:'Centralized task creation for all engines. 2-hour dedup window. Assigns to correct team member.'},
+    {name:'Message Queue',icon:'📨',readiness:'approved',desc:'ALL outbound SMS + email routes through here. Send windows (9am-7pm), dedup, priority queue. Cancels on reply/callback/call. Sends as assigned team member.'},
+    {name:'Task Manager',icon:'📋',readiness:'approved',desc:'Centralized task creation for all engines. 2-hour dedup window. Assigns to correct team member.'},
     {name:'Opportunity Conductor',icon:'🎯',readiness:'testing',desc:'Single authority on CRM state. Pipeline moves, user assignment, contact locking.'},
     {name:'Message Optimizer',icon:'🔧',readiness:'testing',desc:'Daily analysis at 6am. Flags underperforming SMS templates, recommends replacements.'},
   ]},
