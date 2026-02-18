@@ -715,14 +715,10 @@ function openPanel(bot, eng) {
   dryBadge.style.display = 'inline-block';
   dryBadge.textContent = readinessLabels[botReadiness] || 'BUILT';
   dryBadge.style.background = readinessColors[botReadiness] || 'var(--text-dim)';
-  if (botReadiness === 'approved') {
-    dryBadge.style.color = '#000';
-  } else if (botReadiness === 'review') {
+  if (botReadiness === 'approved' || botReadiness === 'review') {
     dryBadge.style.color = '#000';
   } else {
-    dryBadge.style.color = '';
-  } else {
-    dryBadge.style.display = 'none';
+    dryBadge.style.color = '#fff';
   }
 
   // Metrics from real data
