@@ -361,7 +361,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
       <div class="schedule-legend">
         <div class="legend-item"><div class="legend-dot blue"></div>1 Month stays in Sales Process — team handles directly</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>4 Month + 12 Month in Follow Up pipeline — bots manage</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#f0883e"></div>Disposition Advisor silently auditing call → bucket accuracy</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f0883e"></div>Disposition Advisor — freshly built, building & testing</div>
       </div>
     </div>
   </section>
@@ -464,7 +464,6 @@ const engineLayout = [
   // ─── CALL & CONVERSATION ───
   {id:'call-conversation',name:'Call & Conversation',apiId:'call-summary',engineKey:'call_summary',bots:[
     {name:'Call Summary',icon:'📞',readiness:'review',desc:'Generates rich call summaries with property details, motivation, timeline, next steps. Notes only — no tags.'},
-    {name:'Disposition Advisor',icon:'🎯',readiness:'built',desc:'Analyzes calls and recommends follow-up bucket. Building audit data before going live.'},
     {name:'Voicemail Bot',icon:'🎤',readiness:'testing',desc:'CallRail integration — polls every 30 min, matches voicemails to GHL contacts, classifies urgency.'},
   ]},
 
@@ -525,6 +524,7 @@ const engineLayout = [
 
   // ─── COMING SOON ───
   {id:'standalone',name:'Coming Soon',apiId:null,engineKey:null,bots:[
+    {name:'Disposition Advisor',icon:'🎯',readiness:'testing',desc:'Freshly built — pipeline-aware playbooks (Sales Process, Follow-Up, Dispo). Building & testing. Dead = only legal/sold/unviable.'},
     {name:'PPL Refund Bot',icon:'💰',readiness:'built',desc:'Files lead disputes on PropertyLeads and MotivatedSellers. Playwright automation.'},
     {name:'ARV Assistant',icon:'🏗️',readiness:'built',desc:'Grades properties from Street View, calculates construction budget using NAH franchise grading system.'},
     {name:'Market Watch',icon:'📈',readiness:'built',desc:'Tracks market trends, comparable sales, pricing shifts. Daily market intelligence.'},
