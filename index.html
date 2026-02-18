@@ -455,7 +455,7 @@ const engineLayout = [
   // ─── NEW LEAD PROCESSING ───
   {id:'new-lead-chain',name:'New Lead Processing',apiId:'lead-iq',engineKey:'lead_iq',bots:[
     {name:'Data Cleaner',icon:'🧹',readiness:'approved',desc:'Name cleanup, address normalization, business name = street address, timezone, market/state/ppl tags, mailing address via RentCast.'},
-    {name:'Lead IQ Scorer',icon:'🧠',readiness:'testing',desc:'Scores every new lead on 5 factors. Assigns HOT/WARM, routes to team, moves pipeline stage.'},
+    {name:'Lead IQ Scorer',icon:'🧠',readiness:'approved',desc:'Scores on 5 factors (motivation, timeline, condition, price, source). HOT/WARM tag, pipeline move, task, email. After-hours → 9am queue. All leads → Daniel.'},
     {name:'Lead Watchdog',icon:'🐕',readiness:'testing',desc:'Monitors new lead SLA — flags untouched leads at 15 min, escalates to Jessica at 30 min.'},
     {name:'New Lead Responder',icon:'⚡',readiness:'testing',desc:'Fires immediate SMS to every scored lead. Time-aware messaging. Source-branched for PPL vs dialer vs forms.'},
     {name:'Speed to Lead',icon:'⏱️',readiness:'testing',desc:'Tracks lead arrival → first contact. Per team member, per source.'},
